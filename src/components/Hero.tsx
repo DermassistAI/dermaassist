@@ -33,11 +33,13 @@ const Hero = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button variant="secondary" size="lg" className="group">
-                For Healthcare Providers
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                <a href="/demo" className="flex items-center">
+                  Try Demo
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </a>
               </Button>
               <Button variant="outline" size="lg" className="bg-white/10 border-white/30 text-primary-foreground hover:bg-white/20">
-                Patient Access
+                For Healthcare Providers
                 <Heart className="ml-2 h-4 w-4" />
               </Button>
             </div>
