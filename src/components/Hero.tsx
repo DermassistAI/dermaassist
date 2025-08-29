@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-dermatology.jpg";
 
 const Hero = () => {
@@ -38,10 +39,12 @@ const Hero = () => {
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
-              <Button variant="outline" size="lg" className="bg-white/10 border-white/30 text-primary-foreground hover:bg-white/20">
-                For Healthcare Providers
-                <Heart className="ml-2 h-4 w-4" />
-              </Button>
+              <Link to="/providers">
+                <Button variant="outline" size="lg" className="bg-white/10 border-white/30 text-primary-foreground hover:bg-white/20">
+                  For Healthcare Providers
+                  <Heart className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
             </div>
             
             <div className="mt-12 grid grid-cols-3 gap-8 text-center lg:text-left">
