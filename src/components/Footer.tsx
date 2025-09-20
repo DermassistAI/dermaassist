@@ -29,17 +29,8 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-lg mb-6">Platform</h4>
             <nav className="space-y-4">
-              <a href="#" className="block text-warm-ivory/80 hover:text-warm-ivory transition-colors">
-                Healthcare Providers
-              </a>
-              <a href="#" className="block text-warm-ivory/80 hover:text-warm-ivory transition-colors">
-                Patient Portal
-              </a>
-              <a href="#" className="block text-warm-ivory/80 hover:text-warm-ivory transition-colors">
-                API Integration
-              </a>
-              <a href="#" className="block text-warm-ivory/80 hover:text-warm-ivory transition-colors">
-                Training Programs
+              <a href="/demo" className="block text-warm-ivory/80 hover:text-warm-ivory transition-colors">
+                Demo
               </a>
             </nav>
           </div>
@@ -49,15 +40,15 @@ const Footer = () => {
             <div className="space-y-4">
               <div className="flex items-center gap-3 text-warm-ivory/80">
                 <MapPin className="h-4 w-4 flex-shrink-0" />
-                <span className="text-sm">Lagos, Nigeria</span>
+                <span className="text-sm">KNH, Nairobi</span>
               </div>
               <div className="flex items-center gap-3 text-warm-ivory/80">
                 <Mail className="h-4 w-4 flex-shrink-0" />
-                <span className="text-sm">info@dermassist.africa</span>
+                <span className="text-sm">info@dermassistai.com</span>
               </div>
               <div className="flex items-center gap-3 text-warm-ivory/80">
                 <Phone className="h-4 w-4 flex-shrink-0" />
-                <span className="text-sm">+234 (0) 123 456 7890</span>
+                <span className="text-sm">+254 740 695944</span>
               </div>
             </div>
           </div>
@@ -68,8 +59,8 @@ const Footer = () => {
             © 2024 DermAssist. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-warm-ivory/60">
-            <a href="#" className="hover:text-warm-ivory transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-warm-ivory transition-colors">Terms of Service</a>
+            <a href="/privacy" className="hover:text-warm-ivory transition-colors">Privacy Policy</a>
+            <a href="/terms" className="hover:text-warm-ivory transition-colors">Terms of Service</a>
             <a href="#" className="hover:text-warm-ivory transition-colors">Data Protection</a>
           </div>
         </div>

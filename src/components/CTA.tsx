@@ -24,25 +24,25 @@ const CTA = () => {
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
             <Link to="/demo">
               <Button variant="secondary" size="lg" className="group">
-                Schedule a Demo
+                Try Demo
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Link to="/partnership">
+            {/* <Link to="/partnership">
               <Button variant="outline" size="lg" className="bg-white/10 border-white/30 text-primary-foreground hover:bg-white/20">
                 Request Partnership Info
               </Button>
-            </Link>
+            </Link> */}
           </div>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
             <div className="flex items-center justify-center gap-3 text-primary-foreground/90">
               <Mail className="h-5 w-5" />
-              <span>partnerships@dermassist.africa</span>
+              <span>info@dermassistai.com</span>
             </div>
             <div className="flex items-center justify-center gap-3 text-primary-foreground/90">
               <Phone className="h-5 w-5" />
-              <span>+234 (0) 123 456 7890</span>
+              <span>+254 740 695944</span>
             </div>
           </div>
         </div>

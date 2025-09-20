@@ -18,18 +18,18 @@ const Header = () => {
           </div>
           
           <nav className="hidden md:flex items-center gap-8">
-            <a href="/#features" className="text-muted-foreground hover:text-primary transition-colors">
-              Features
+            <a href="/" className="text-muted-foreground hover:text-primary transition-colors">
+              Home
             </a>
-            <a href="/#about" className="text-muted-foreground hover:text-primary transition-colors">
+            {/* <a href="/#about" className="text-muted-foreground hover:text-primary transition-colors">
               About
-            </a>
+            </a> */}
             <a href="/demo" className="text-muted-foreground hover:text-primary transition-colors">
               Demo
             </a>
-            <a href="/#contact" className="text-muted-foreground hover:text-primary transition-colors">
+            {/* <a href="/#contact" className="text-muted-foreground hover:text-primary transition-colors">
               Contact
-            </a>
+            </a> */}
           </nav>
           
           <div className="hidden md:flex items-center gap-4">
@@ -45,12 +45,16 @@ const Header = () => {
             </Link>
           </div>
           
-          <button 
+          <Button
+            variant="ghost"
+            size="icon"
             className="md:hidden p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            type="button"
           >
             <Menu className="h-5 w-5 text-foreground" />
-          </button>
+          </Button>
         </div>
         
         {/* Mobile Menu */}
