@@ -17,9 +17,10 @@ export async function callModelText(client: unknown, prompt: string): Promise<st
     // Cast client to AxAIService for ax-llm usage
     const aiService = client as AxAIService;
     
-    // Use the ax() pattern which is the proper way to work with ax-llm clients
-    // Based on the documentation: ax('input -> output') creates a generator
-    const generator = ax('userPrompt:string -> response:string');
+  // Use the ax() pattern which is the proper way to work with ax-llm clients
+  // Based on the documentation: ax('input -> output') creates a generator
+  // Avoid overly-generic field names — ax enforces descriptive names.
+  const generator = ax('userPrompt:string -> analysis:string');
     
     // Forward with the AI client
     const result = await generator.forward(aiService, { userPrompt: prompt });
@@ -29,7 +30,10 @@ export async function callModelText(client: unknown, prompt: string): Promise<st
     // Extract the response field
     if (result && typeof result === 'object') {
       const resultObj = result as Record<string, unknown>;
-      if (typeof resultObj.response === 'string') return resultObj.response;
+  // Prefer the typed 'analysis' field (non-generic) required by ax signature
+  if (typeof resultObj.analysis === 'string') return resultObj.analysis;
+  if (typeof resultObj.ai_result === 'string') return resultObj.ai_result;
+  if (typeof resultObj.analysis_text === 'string') return resultObj.analysis_text;
       
       // Try other common field names
       if (typeof resultObj.output === 'string') return resultObj.output;
