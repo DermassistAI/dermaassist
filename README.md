@@ -17,7 +17,8 @@ This application has been converted from Vite to **Next.js 15** with the followi
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **UI Components**: Radix UI + shadcn/ui
-- **AI Integration**: Azure OpenAI (GPT-4 Omni Mini)
+- **AI Integration**: Azure OpenAI (GPT-4 Omni Mini) via AX-LLM
+- **AI Framework**: [AX-LLM](https://github.com/ax-llm/ax) for unified LLM interface
 - **Package Manager**: pnpm
 
 ## Getting Started
