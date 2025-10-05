@@ -1,6 +1,6 @@
-# Environment Setup for Azure OpenAI
+# Environment Setup for Azure OpenAI with AX-LLM
 
-This application uses Azure OpenAI for AI-powered skin condition analysis.
+This application uses Azure OpenAI via the AX-LLM framework for AI-powered skin condition analysis.
 
 ## Required Environment Variables
 
@@ -13,6 +13,14 @@ AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com/
 AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o-mini
 AZURE_OPENAI_API_VERSION=2024-02-15-preview
 ```
+
+## About AX-LLM
+
+This application uses [AX-LLM](https://github.com/ax-llm/ax) as the AI agent framework, which provides:
+- Unified interface for multiple LLM providers
+- Built-in support for Azure OpenAI
+- Type-safe API with excellent error handling
+- Streaming and structured output support
 
 ## Getting Azure OpenAI Credentials
 
@@ -27,7 +35,7 @@ This application is configured to use **gpt-4o-mini** (GPT-4 Omni Mini) which is
 - Cost-effective for production use
 - Fast response times
 - Excellent for diagnostic reasoning tasks
-- Supports JSON response format
+- Supports structured output
 
 ## Running Locally
 
@@ -55,8 +63,22 @@ The AI analysis is handled by the Next.js API route at `/api/analyze`.
 
 This is a server-side route that:
 - Accepts patient information and optional image data
-- Sends a structured prompt to Azure OpenAI
+- Uses AX-LLM to send a structured prompt to Azure OpenAI
 - Returns a JSON response with diagnosis, recommendations, and cultural considerations
+
+## AX-LLM Configuration
+
+The AX-LLM client is configured in the API route with:
+```typescript
+const ai = new AI({
+  name: 'azure',
+  apiKey: process.env.AZURE_OPENAI_API_KEY,
+  config: {
+    apiURL: `${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT_NAME}`,
+    apiVersion: process.env.AZURE_OPENAI_API_VERSION,
+  }
+});
+```
 
 ## Security Notes
 

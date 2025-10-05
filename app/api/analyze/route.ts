@@ -1,21 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { OpenAI } from 'openai';
+import { AxAIAzureOpenAI } from '@ax-llm/ax';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-// Lazy initialize OpenAI client
-function getOpenAIClient() {
+// Lazy initialize AX AI client with Azure OpenAI
+function getAIClient() {
   if (!process.env.AZURE_OPENAI_API_KEY) {
     throw new Error('Azure OpenAI API key is not configured');
   }
   
-  return new OpenAI({
+  const ai = new AxAIAzureOpenAI({
     apiKey: process.env.AZURE_OPENAI_API_KEY,
-    baseURL: `${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT_NAME}`,
-    defaultQuery: { 'api-version': process.env.AZURE_OPENAI_API_VERSION },
-    defaultHeaders: { 'api-key': process.env.AZURE_OPENAI_API_KEY },
+    resourceName: process.env.AZURE_OPENAI_ENDPOINT?.replace('https://', '').replace('.openai.azure.com/', '') || '',
+    deploymentName: process.env.AZURE_OPENAI_DEPLOYMENT_NAME || 'gpt-4o-mini',
+    version: process.env.AZURE_OPENAI_API_VERSION || '2024-02-15-preview',
   });
+  
+  return ai;
 }
 
 export async function POST(req: NextRequest) {
@@ -31,7 +33,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Create a detailed prompt for dermatological analysis
-    const prompt = `You are a dermatology AI assistant trained to analyze skin conditions with cultural awareness, particularly for melanated skin tones. Analyze the following patient information and provide a detailed diagnostic assessment:
+    const userPrompt = `Analyze the following patient information and provide a detailed diagnostic assessment:
 
 Patient Information:
 - Age: ${patientInfo.age || 'Not provided'}
@@ -73,32 +75,36 @@ Format your response as JSON with this structure:
   "followUp": "string"
 }`;
 
-    // Call Azure OpenAI
-    const client = getOpenAIClient();
-    const completion = await client.chat.completions.create({
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a specialized dermatology AI assistant with expertise in diagnosing skin conditions in melanated skin. You provide culturally-aware, evidence-based diagnostic support.',
-        },
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
+    // Call Azure OpenAI via AX
+    const ai = getAIClient();
+    
+    const result = await ai.chat({
       model: process.env.AZURE_OPENAI_DEPLOYMENT_NAME || 'gpt-4o-mini',
+      systemPrompt: 'You are a specialized dermatology AI assistant with expertise in diagnosing skin conditions in melanated skin. You provide culturally-aware, evidence-based diagnostic support. Always respond with valid JSON only.',
+      prompt: userPrompt,
+      maxTokens: 2000,
       temperature: 0.7,
-      max_tokens: 2000,
-      response_format: { type: 'json_object' },
     });
 
-    const result = completion.choices[0]?.message?.content;
+    const content = result.results?.[0]?.content || result.content;
     
-    if (!result) {
+    if (!content) {
       throw new Error('No response from AI model');
     }
 
-    const analysis = JSON.parse(result);
+    // Parse the JSON response
+    let analysis;
+    try {
+      analysis = JSON.parse(content);
+    } catch (parseError) {
+      // If parsing fails, try to extract JSON from the response
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        analysis = JSON.parse(jsonMatch[0]);
+      } else {
+        throw new Error('Failed to parse AI response as JSON');
+      }
+    }
 
     return NextResponse.json({
       success: true,
