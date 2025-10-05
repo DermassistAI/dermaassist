@@ -1,6 +1,9 @@
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Heart } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
 import heroImage from "@/assets/hero-dermatology.jpg";
 
 const Hero = () => {
@@ -33,13 +36,13 @@ const Hero = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button variant="secondary" size="lg" className="group">
-                <a href="/demo" className="flex items-center">
+              <Link href="/demo">
+                <Button variant="secondary" size="lg" className="group">
                   Try Demo
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </Button>
-              <Link to="/providers">
+                </Button>
+              </Link>
+              <Link href="/providers">
                 <Button variant="outline" size="lg" className="bg-white/10 border-white/30 text-primary-foreground hover:bg-white/20">
                   For Healthcare Providers
                   <Heart className="ml-2 h-4 w-4" />
@@ -65,10 +68,11 @@ const Hero = () => {
           
           <div className="relative">
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-medium">
-              <img 
+              <Image 
                 src={heroImage} 
                 alt="African healthcare professional using DermAssist for dermatology consultation"
                 className="w-full h-auto object-cover"
+                priority
               />
             </div>
             <div className="absolute -top-6 -right-6 w-72 h-72 bg-golden-sand/20 rounded-full blur-3xl"></div>

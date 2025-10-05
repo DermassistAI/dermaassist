@@ -1,7 +1,9 @@
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { Stethoscope, Menu } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,12 +35,12 @@ const Header = () => {
           </nav>
           
           <div className="hidden md:flex items-center gap-4">
-            <Link to="/sign-in">
+            <Link href="/sign-in">
               <Button variant="ghost">
                 Sign In
               </Button>
             </Link>
-            <Link to="/get-started">
+            <Link href="/get-started">
               <Button variant="medical">
                 Get Started
               </Button>
@@ -74,10 +76,10 @@ const Header = () => {
                 Contact
               </a>
               <div className="flex flex-col gap-2 mt-4">
-                <Link to="/sign-in">
+                <Link href="/sign-in">
                   <Button variant="ghost" className="w-full">Sign In</Button>
                 </Link>
-                <Link to="/get-started">
+                <Link href="/get-started">
                   <Button variant="medical" className="w-full">Get Started</Button>
                 </Link>
               </div>
