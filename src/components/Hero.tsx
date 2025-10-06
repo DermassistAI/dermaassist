@@ -62,10 +62,13 @@ const Hero = () => {
           
           <div className="relative">
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-medium">
-              <img 
-                src={heroImage.src} 
+              <Image
+                src={heroImage}
                 alt="African healthcare professional using DermAssist for dermatology consultation"
+                width={heroImage.width}
+                height={heroImage.height}
                 className="w-full h-auto object-cover"
+                priority
               />
             </div>
             <div className="absolute -top-6 -right-6 w-72 h-72 bg-golden-sand/20 rounded-full blur-3xl"></div>
