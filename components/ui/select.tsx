@@ -6,3 +6,19 @@ export function Select({ className, ...props }: React.SelectHTMLAttributes<HTMLS
 }
 
 export default Select;
+
+export function SelectTrigger({ children, ...props }: any) {
+  return <div {...props}>{children}</div>;
+}
+
+export function SelectValue({ children, ...props }: any) {
+  return <span {...props}>{children}</span>;
+}
+
+export function SelectContent({ children, ...props }: any) {
+  return <div {...props}>{children}</div>;
+}
+
+export function SelectItem({ children, ...props }: any) {
+  return <div {...props}>{children}</div>;
+}

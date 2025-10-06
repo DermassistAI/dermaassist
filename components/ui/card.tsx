@@ -17,4 +17,12 @@ export function CardDescription({ className, ...props }: React.HTMLAttributes<HT
   return <div className={cn('text-sm text-muted-foreground', className)} {...props} />;
 }
 
+export function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn('p-4', className)} {...props} />;
+}
+
+export function CardFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn('mt-4', className)} {...props} />;
+}
+
 export default Card;
