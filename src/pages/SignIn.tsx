@@ -1,16 +1,18 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Stethoscope, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const SignIn = () => {
   return (
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         <Link 
-          to="/" 
+          href="/" 
           className="inline-flex items-center text-primary-foreground/90 hover:text-primary-foreground mb-8 transition-colors"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -46,8 +48,8 @@ const SignIn = () => {
           
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-sm text-muted-foreground text-center">
-              Don't have an account?{" "}
-              <Link to="/get-started" className="text-primary hover:underline">
+              Don&apos;t have an account?{" "}
+              <Link href="/get-started" className="text-primary hover:underline">
                 Get Started
               </Link>
             </div>
