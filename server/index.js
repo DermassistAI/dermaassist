@@ -23,16 +23,12 @@ if (!fs.existsSync(path.dirname(dbPath))) {
 }
 initDb(dbPath);
 
-// Serve static frontend if present (built Vite output in /dist)
-const distPath = path.resolve(process.cwd(), 'dist');
-if (fs.existsSync(distPath)) {
-  logger.info({ distPath }, 'serving static frontend from dist');
-  app.use(express.static(distPath));
-  // fallback to index.html for SPA routes
-  app.get('*', (req, res, next) => {
-    if (req.path.startsWith('/api/')) return next();
-    res.sendFile(path.join(distPath, 'index.html'));
-  });
+// Serve static frontend if present (built Next.js output in .next/standalone)
+// Note: For production deployment, use `next start` instead of this server
+const nextOutPath = path.resolve(process.cwd(), '.next', 'standalone');
+if (fs.existsSync(nextOutPath)) {
+  logger.info({ nextOutPath }, 'serving static frontend from Next.js build');
+  app.use(express.static(nextOutPath));
 }
 
 // Simple de-identification function: remove common personal fields.
