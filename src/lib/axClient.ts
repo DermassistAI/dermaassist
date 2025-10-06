@@ -55,8 +55,10 @@ export function createDefaultClient(): AiClient {
   return createAzureOpenAIClient();
 }
 
-export default {
+const axClient = {
   AZURE_OPENAI_MODELS,
   createAzureOpenAIClient,
   createDefaultClient,
 };
+
+export default axClient;
