@@ -1,7 +1,9 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Stethoscope, Menu } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,27 +20,27 @@ const Header = () => {
           </div>
           
           <nav className="hidden md:flex items-center gap-8">
-            <a href="/" className="text-muted-foreground hover:text-primary transition-colors">
+            <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">
               Home
-            </a>
+            </Link>
             {/* <a href="/#about" className="text-muted-foreground hover:text-primary transition-colors">
               About
             </a> */}
-            <a href="/demo" className="text-muted-foreground hover:text-primary transition-colors">
+            <Link href="/demo" className="text-muted-foreground hover:text-primary transition-colors">
               Demo
-            </a>
+            </Link>
             {/* <a href="/#contact" className="text-muted-foreground hover:text-primary transition-colors">
               Contact
             </a> */}
           </nav>
           
           <div className="hidden md:flex items-center gap-4">
-            <Link to="/sign-in">
+            <Link href="/sign-in">
               <Button variant="ghost">
                 Sign In
               </Button>
             </Link>
-            <Link to="/get-started">
+            <Link href="/get-started">
               <Button variant="medical">
                 Get Started
               </Button>
@@ -67,17 +69,17 @@ const Header = () => {
               <a href="#about" className="text-muted-foreground hover:text-primary transition-colors">
                 About
               </a>
-              <a href="/demo" className="text-muted-foreground hover:text-primary transition-colors">
+              <Link href="/demo" className="text-muted-foreground hover:text-primary transition-colors">
                 Demo
-              </a>
+              </Link>
               <a href="#contact" className="text-muted-foreground hover:text-primary transition-colors">
                 Contact
               </a>
               <div className="flex flex-col gap-2 mt-4">
-                <Link to="/sign-in">
+                <Link href="/sign-in">
                   <Button variant="ghost" className="w-full">Sign In</Button>
                 </Link>
-                <Link to="/get-started">
+                <Link href="/get-started">
                   <Button variant="medical" className="w-full">Get Started</Button>
                 </Link>
               </div>

@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Camera, User, Brain } from "lucide-react";
@@ -23,9 +25,9 @@ const Demo = () => {
   const [parsedOutput, setParsedOutput] = useState<ModelOutput | null>(null);
   const { toast } = useToast();
 
-  // The demo uses only live model output (Qwen via Groq) for results.
+  // The demo uses live Azure OpenAI model output for results.
   // We keep a small textual fallback for the AI summary display if parsing fails.
-  const mockSummaryFallback = `No structured model output was parsed. If you see this, confirm VITE_GROQ_APIKEY (client) or GROQ_APIKEY (server) is set in your local env and that the model returned valid JSON.`;
+  const mockSummaryFallback = `No structured model output was parsed. Ensure Azure OpenAI credentials are properly configured in environment variables.`;
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -51,7 +53,7 @@ const Demo = () => {
         progress = 100;
         clearInterval(interval);
           setTimeout(async () => {
-            // call Qwen model and store response
+            // call Azure OpenAI model and store response
             try {
               const client = ax.createDefaultClient();
 
@@ -77,7 +79,7 @@ const Demo = () => {
 
               // attempt to persist the (possibly unparsed) model output to the local server
               try {
-                const apiBase = (import.meta.env.VITE_API_BASE_URL as string) ?? '';
+                const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
                 await fetch(`${apiBase}/api/results`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },

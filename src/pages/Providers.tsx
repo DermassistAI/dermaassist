@@ -1,15 +1,17 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Stethoscope, ArrowLeft, Shield, Database, Users, BookOpen, ChartBar, Globe } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const Providers = () => {
   return (
     <div className="min-h-screen bg-gradient-hero">
       <div className="container mx-auto px-6 py-12">
         <Link 
-          to="/" 
+          href="/" 
           className="inline-flex items-center text-primary-foreground/90 hover:text-primary-foreground mb-8 transition-colors"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -147,7 +149,7 @@ const Providers = () => {
                   <Button variant="medical" className="flex-1">
                     Request Provider Access
                   </Button>
-                  <Link to="/partnership" className="flex-1">
+                  <Link href="/partnership" className="flex-1">
                     <Button variant="outline" className="w-full bg-white/10 border-white/30 text-foreground hover:bg-white/20">
                       Partnership Inquiry
                     </Button>

@@ -1,6 +1,8 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Mail, Phone } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const CTA = () => {
   return (
@@ -22,13 +24,13 @@ const CTA = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-            <Link to="/demo">
+            <Link href="/demo">
               <Button variant="secondary" size="lg" className="group">
                 Try Demo
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            {/* <Link to="/partnership">
+            {/* <Link href="/partnership">
               <Button variant="outline" size="lg" className="bg-white/10 border-white/30 text-primary-foreground hover:bg-white/20">
                 Request Partnership Info
               </Button>
