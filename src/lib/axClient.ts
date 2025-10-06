@@ -1,51 +1,93 @@
 /**
- * Ax-LLM client helpers with stronger developer-facing types.
- *
- * We expose const-model maps (not enums) and literal union types derived
- * from them. The ai(...) calls are lightly cast to satisfy the ax-llm
- * initialization typing while keeping inputs typed.
+ * Ax-LLM client helpers for Azure OpenAI integration.
+ * Uses GPT-4o-mini (or other Azure OpenAI models) for culturally-aware dermatological diagnostics.
  */
 import { ai } from "@ax-llm/ax";
 
-/* ---- Qwen models (const map + union type) ---- */
-export const QWEN_MODELS = {
-  QWEN3_32B: "qwen3-32b",
+/* ---- Azure OpenAI models (const map + union type) ---- */
+export const AZURE_OPENAI_MODELS = {
+  GPT_4O_MINI: "gpt-4o-mini",
+  GPT_4O: "gpt-4o",
+  GPT_4: "gpt-4",
 } as const;
 
-export type QwenModel = typeof QWEN_MODELS[keyof typeof QWEN_MODELS];
+export type AzureOpenAIModel = typeof AZURE_OPENAI_MODELS[keyof typeof AZURE_OPENAI_MODELS];
 
 type AiClient = unknown;
 
-export function createQwenClient(options?: { apiKey?: string; model?: QwenModel }): AiClient {
-  // Use Groq as the inference gateway and forward to Qwen model.
-  // Prefer Vite client-side env var (VITE_GROQ_APIKEY) when running in the browser.
-  const viteEnv = (typeof import.meta !== 'undefined') ? (import.meta.env as unknown as Record<string, string | undefined>) : {};
-  const apiKey = options?.apiKey ?? viteEnv.VITE_GROQ_APIKEY ?? (typeof process !== 'undefined' ? process.env.GROQ_APIKEY : undefined);
-  const model = options?.model ?? QWEN_MODELS.QWEN3_32B;
-  // Allow overriding the Groq API base (helpful when provider endpoints change or for local proxies)
-  const serverEnv = (typeof process !== 'undefined') ? (process as unknown as { env?: Record<string, string | undefined> }).env : undefined;
-  const apiBase = options?.apiKey ? undefined : (viteEnv.VITE_GROQ_API_BASE ?? (serverEnv ? serverEnv.GROQ_API_BASE : undefined));
+export function createAzureOpenAIClient(options?: { apiKey?: string; endpoint?: string; deployment?: string; apiVersion?: string }): AiClient {
+  // Get environment variables from process.env (server-side) or Next.js public vars (client-side)
+  const getEnvVar = (key: string) => {
+    if (typeof process !== 'undefined' && process.env?.[key]) {
+      return process.env[key];
+    }
+    // Next.js public vars for client-side (if absolutely necessary)
+    if (typeof window !== 'undefined' && (window as any).__NEXT_DATA__?.props?.pageProps?.[key]) {
+      return (window as any).__NEXT_DATA__.props.pageProps[key];
+    }
+    return undefined;
+  };
 
-  // Initialize Groq provider dynamically and ask it to run the Qwen model.
-  // Different ax-llm releases may type providers differently, so cast safely.
-    // dynamic provider init for groq forwarding to qwen
-  // Pass apiBase/baseUrl for provider compatibility in case the provider expects a named field.
-  const providerConfig: Record<string, unknown> = { model };
-  if (apiBase) {
-    providerConfig.apiBase = apiBase;
-    providerConfig.baseUrl = apiBase;
+  const apiKey = options?.apiKey ?? getEnvVar('AZURE_OPENAI_API_KEY');
+  let endpoint = options?.endpoint ?? getEnvVar('AZURE_OPENAI_ENDPOINT');
+  const deployment = options?.deployment ?? getEnvVar('AZURE_OPENAI_DEPLOYMENT') ?? AZURE_OPENAI_MODELS.GPT_4O_MINI;
+  const apiVersion = options?.apiVersion ?? getEnvVar('AZURE_OPENAI_API_VERSION') ?? '2025-04-01-preview';
+
+  // Normalize endpoint: if a full Responses path was provided (for example
+  // https://<resource>.cognitiveservices.azure.com/openai/responses), pass the
+  // resource origin to the provider (https://<resource>.cognitiveservices.azure.com).
+  if (endpoint) {
+    try {
+      const u = new URL(endpoint)
+      if (u.pathname && u.pathname !== '/') {
+        endpoint = u.origin
+      }
+    } catch (e) {
+      // ignore invalid URL and let provider handle it
+    }
   }
 
-  return (ai({ name: "groq", apiKey, config: providerConfig }) as unknown) as AiClient;
+  if (!apiKey) {
+    throw new Error('Azure OpenAI API key is required. Set AZURE_OPENAI_API_KEY environment variable.');
+  }
+
+  if (!endpoint) {
+    throw new Error('Azure OpenAI endpoint is required. Set AZURE_OPENAI_ENDPOINT environment variable.');
+  }
+
+  // Initialize Azure OpenAI provider with ax-llm.
+  // ax-llm expects Azure-specific fields like resourceName and deploymentName.
+  // Extract resourceName from the endpoint host (e.g. "dermaassist-resource" from
+  // "https://dermaassist-resource.cognitiveservices.azure.com").
+  let resourceName: string | undefined
+  try {
+    const u = new URL(endpoint as string)
+    const host = u.hostname // dermaassist-resource.cognitiveservices.azure.com
+    const parts = host.split('.')
+    if (parts.length > 0) resourceName = parts[0]
+  } catch (e) {
+    // ignore
+  }
+
+  const resourceNameFinal = resourceName ?? undefined
+
+  return (ai({
+    name: 'azure-openai',
+    apiKey,
+    resourceName: resourceNameFinal,
+    deploymentName: deployment,
+    version: apiVersion,
+  } as any) as unknown) as AiClient;
 }
 
 export function createDefaultClient(): AiClient {
-  // default to qwen only
-  return createQwenClient();
+  return createAzureOpenAIClient();
 }
 
-export default {
-  QWEN_MODELS,
-  createQwenClient,
+const axClient = {
+  AZURE_OPENAI_MODELS,
+  createAzureOpenAIClient,
   createDefaultClient,
 };
+
+export default axClient;
