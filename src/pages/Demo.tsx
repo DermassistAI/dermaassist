@@ -50,41 +50,55 @@ const Demo = () => {
         progress = 100;
         clearInterval(interval);
           setTimeout(async () => {
-            // call Azure OpenAI model and store response
+            // call server-side API which uses the secure Azure client
             try {
-              const client = ax.createDefaultClient();
-
               const input: ModelInput = {
                 imageBase64: uploadedImage,
-                extraContext: "Demo run",
-              };
-
-              const prompt = buildPrompt(input);
-              const text = await callModelText(client, prompt);
-              setAnalysisProgress(100);
-              setModelOutput(String(text));
-
-              // Try to parse JSON output into ModelOutput; if parsing fails keep parsedOutput null
-              let parsed: ModelOutput | null = null;
-              try {
-                parsed = JSON.parse(String(text)) as ModelOutput;
-                setParsedOutput(parsed);
-              } catch (e) {
-                // leave parsedOutput null - ResultsStep will render a helpful fallback
-                setParsedOutput(null);
+                extraContext: 'Demo run',
               }
 
-              // attempt to persist the (possibly unparsed) model output to the local server
+              const apiRes = await fetch('/api/ai', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ input }),
+              })
+
+              const apiJson = await apiRes.json()
+              if (apiJson?.error) throw new Error(apiJson.error)
+              const text = apiJson?.text ?? ''
+              setAnalysisProgress(100)
+              setModelOutput(String(text))
+
+              // Prefer server-parsed ModelOutput if available
+              let parsed: ModelOutput | null = null
+              if (apiJson?.parsed) {
+                parsed = apiJson.parsed as ModelOutput
+                setParsedOutput(parsed)
+              } else {
+                try {
+                  parsed = JSON.parse(String(text)) as ModelOutput
+                  setParsedOutput(parsed)
+                } catch (e) {
+                  setParsedOutput(null)
+                }
+              }
+
+              // attempt to persist the model output to the local server endpoint
               try {
-                const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-                await fetch(`${apiBase}/api/results`, {
+                const res = await fetch('/api/results', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ modelOutput: String(text), parsed })
-                });
+                  body: JSON.stringify({ modelOutput: String(text), parsed }),
+                })
+                if (res.ok) {
+                  toast('Results saved')
+                } else {
+                  console.warn('failed to persist results', await res.text())
+                  toast('Failed to save results')
+                }
               } catch (e) {
-                // non-fatal - log in browser console (server may not be running in dev)
-                console.warn('failed to persist results', e);
+                console.warn('failed to persist results', e)
+                toast('Failed to save results')
               }
 
               setCurrentStep('results');
@@ -169,7 +183,7 @@ const Demo = () => {
                     AI Analysis in Progress
                   </CardTitle>
                   <CardDescription>
-                    DermAssist is analyzing the image with culturally-aware AI models
+                    DermAssist is analyzing the image with a base model
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-8">

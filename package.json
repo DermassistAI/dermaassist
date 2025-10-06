@@ -4,12 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+  "dev": "next dev",
     "server": "node server/index.js",
     "start": "next start",
     "build": "next build",
     "lint": "next lint",
-    "preview": "next start"
+    "preview": "next start",
+    "test:azure": "node --experimental-fetch scripts/test-azure-responses.mjs"
   },
   "dependencies": {
     "body-parser": "^1.20.2",

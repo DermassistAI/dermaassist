@@ -29,9 +29,23 @@ export function createAzureOpenAIClient(options?: { apiKey?: string; endpoint?: 
   };
 
   const apiKey = options?.apiKey ?? getEnvVar('AZURE_OPENAI_API_KEY');
-  const endpoint = options?.endpoint ?? getEnvVar('AZURE_OPENAI_ENDPOINT');
+  let endpoint = options?.endpoint ?? getEnvVar('AZURE_OPENAI_ENDPOINT');
   const deployment = options?.deployment ?? getEnvVar('AZURE_OPENAI_DEPLOYMENT') ?? AZURE_OPENAI_MODELS.GPT_4O_MINI;
-  const apiVersion = options?.apiVersion ?? getEnvVar('AZURE_OPENAI_API_VERSION') ?? '2024-02-15-preview';
+  const apiVersion = options?.apiVersion ?? getEnvVar('AZURE_OPENAI_API_VERSION') ?? '2025-04-01-preview';
+
+  // Normalize endpoint: if a full Responses path was provided (for example
+  // https://<resource>.cognitiveservices.azure.com/openai/responses), pass the
+  // resource origin to the provider (https://<resource>.cognitiveservices.azure.com).
+  if (endpoint) {
+    try {
+      const u = new URL(endpoint)
+      if (u.pathname && u.pathname !== '/') {
+        endpoint = u.origin
+      }
+    } catch (e) {
+      // ignore invalid URL and let provider handle it
+    }
+  }
 
   if (!apiKey) {
     throw new Error('Azure OpenAI API key is required. Set AZURE_OPENAI_API_KEY environment variable.');
@@ -41,14 +55,29 @@ export function createAzureOpenAIClient(options?: { apiKey?: string; endpoint?: 
     throw new Error('Azure OpenAI endpoint is required. Set AZURE_OPENAI_ENDPOINT environment variable.');
   }
 
-  // Initialize Azure OpenAI provider with ax-llm
-  const providerConfig: Record<string, unknown> = { 
-    model: deployment,
-    apiVersion,
-    endpoint,
-  };
+  // Initialize Azure OpenAI provider with ax-llm.
+  // ax-llm expects Azure-specific fields like resourceName and deploymentName.
+  // Extract resourceName from the endpoint host (e.g. "dermaassist-resource" from
+  // "https://dermaassist-resource.cognitiveservices.azure.com").
+  let resourceName: string | undefined
+  try {
+    const u = new URL(endpoint as string)
+    const host = u.hostname // dermaassist-resource.cognitiveservices.azure.com
+    const parts = host.split('.')
+    if (parts.length > 0) resourceName = parts[0]
+  } catch (e) {
+    // ignore
+  }
 
-  return (ai({ name: "azure-openai", apiKey, config: providerConfig }) as unknown) as AiClient;
+  const resourceNameFinal = resourceName ?? undefined
+
+  return (ai({
+    name: 'azure-openai',
+    apiKey,
+    resourceName: resourceNameFinal,
+    deploymentName: deployment,
+    version: apiVersion,
+  } as any) as unknown) as AiClient;
 }
 
 export function createDefaultClient(): AiClient {

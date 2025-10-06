@@ -85,13 +85,13 @@ export default function ResultsStep({ parsedOutput, modelOutput, onReset }: { pa
       </Card>
 
       <div className="space-y-4">
-        {modelOutput ? (
+        {parsedOutput ? (
           <div className="mb-4 p-4 rounded bg-background/60 border border-border">
-            <h4 className="font-semibold">AI Summary (raw)</h4>
-            <pre className="text-sm text-muted-foreground whitespace-pre-wrap">{modelOutput}</pre>
+            <h4 className="font-semibold">AI Result</h4>
+            <p className="text-sm text-muted-foreground">Structured output parsed successfully and displayed above.</p>
           </div>
         ) : (
-          <div className="mb-4 p-4 rounded bg-background/60 border border-border text-muted-foreground">No AI output available yet.</div>
+          <div className="mb-4 p-4 rounded bg-background/60 border border-border text-muted-foreground">No structured AI output was parsed. The model provided a narrative summary; provide more clinical details or retry.</div>
         )}
 
         <div className="flex justify-between">

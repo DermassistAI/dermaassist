@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1759769600196,
+    "createdAt": "2025-10-06T16:53:20.196Z",
+    "payload": {
+      "modelOutput": "{\n  \"summary\": \"Image data provided in the input was not accessible for review. Because the lesion(s) could not be visualized, a definitive diagnosis cannot be made. Below are likely possibilities and practical next steps based on common presentations; clinical correlation, targeted exam, and diagnostics (KOH, culture, biopsy) are required to reach a final diagnosis.\",\n  \"primaryDiagnosis\": {\n    \"condition\": \"Indeterminate due to unavailable image\",\n    \"confidence\": 0.15,\n    \"severity\": \"Unable to assess\",\n    \"description\": \"The image was not viewable, so a reliable diagnosis cannot be rendered. Differential diagnoses based on common dermatologic presentations include eczematous dermatitis, tinea corporis, psoriasis, contact dermatitis, or superficial bacterial infection. Recommend obtaining clear photos and clinical history for targeted evaluation.\"\n  },\n  \"differentials\": [\n    {\n      \"condition\": \"Tinea corporis (superficial dermatophyte infection)\",\n      \"probability\": 0.25,\n      \"rationale\": \"Common cause of scaly, annular plaques with central clearing. Easily missed without close inspection; KOH preparation or fungal culture can confirm. Empiric topical antifungal may be diagnostic and therapeutic.\"\n    },\n    {\n      \"condition\": \"Eczematous dermatitis (atopic or contact)\",\n      \"probability\": 0.25,\n      \"rationale\": \"Very common; presents with pruritic, erythematous, sometimes oozing or scaling patches. History of exposures, itch, chronicity, and response to emollients/steroids help differentiate from infection.\"\n    },\n    {\n      \"condition\": \"Plaque psoriasis\",\n      \"probability\": 0.15,\n      \"rationale\": \"Well-demarcated, thick, silvery scaly plaques favor psoriasis. Nail changes or typical distribution (scalp, extensor surfaces) increase likelihood. Response to topical corticosteroids and vitamin D analogues is typical.\"\n    },\n    {\n      \"condition\": \"Impetigo / superficial bacterial infection\",\n      \"probability\": 0.10,\n      \"rationale\": \"If lesions are crusted, purulent, rapidly spreading, or associated with systemic signs, a bacterial etiology (Staphylococcus/Streptococcus) is more likely and requires topical or systemic antibiotics.\"\n    },\n    {\n      \"condition\": \"Cutaneous candidiasis or intertrigo\",\n      \"probability\": 0.05,\n      \"rationale\": \"Erythematous, macerated patches in skin folds with satellite pustules suggest Candida; KOH, culture, or response to topical azoles supports diagnosis.\"\n    }\n  ],\n  \"culturalConsiderations\": [\n    \"Erythema and inflammation may be less obvious on darker skin tones; post-inflammatory hyperpigmentation and keloid tendency are important considerations.\",\n    \"Patients may use traditional or OTC topical remedies (herbal pastes, corticosteroid-containing creams) that alter lesion appearance and complicate diagnosis.\",\n    \"Modesty preferences, gender of the examiner, language, and health literacy can affect history-taking and willingness to show or seek care for skin lesions.\"\n  ],\n  \"recommendations\": [\n    \"Obtain high-quality clinical photographs (multiple angles, close-up with scale/ruler, good lighting) or arrange in-person dermatologic examination.\",\n    \"Provide a focused history: onset, evolution, symptoms (itch, pain), prior treatments, recent exposures/travel, associated systemic symptoms, and past dermatologic conditions.\",\n    \"If lesions are scaly and annular, perform a KOH preparation to evaluate for dermatophytes; consider a trial of topical antifungal for 2 weeks if KOH not immediately available.\",\n    \"Avoid empiric potent topical corticosteroids until infection is reasonably excluded; consider gentle emollients and, if eczematous, a low-to-moderate potency steroid short term under supervision.\",\n    \"If there are signs of secondary bacterial infection (purulence, spreading erythema, fever), seek urgent in-person care for possible cultures and systemic antibiotics.\",\n    \"Refer to dermatology for persistent, atypical, rapidly changing, or treatment-refractory lesions; consider skin biopsy when malignancy or diagnostic uncertainty remains.\"\n  ]\n}",
+      "parsed": {
+        "summary": "Image data provided in the input was not accessible for review. Because the lesion(s) could not be visualized, a definitive diagnosis cannot be made. Below are likely possibilities and practical next steps based on common presentations; clinical correlation, targeted exam, and diagnostics (KOH, culture, biopsy) are required to reach a final diagnosis.",
+        "primaryDiagnosis": {
+          "condition": "Indeterminate due to unavailable image",
+          "confidence": 0.15,
+          "severity": "Unable to assess",
+          "description": "The image was not viewable, so a reliable diagnosis cannot be rendered. Differential diagnoses based on common dermatologic presentations include eczematous dermatitis, tinea corporis, psoriasis, contact dermatitis, or superficial bacterial infection. Recommend obtaining clear photos and clinical history for targeted evaluation."
+        },
+        "differentials": [
+          {
+            "condition": "Tinea corporis (superficial dermatophyte infection)",
+            "probability": 0.25,
+            "rationale": "Common cause of scaly, annular plaques with central clearing. Easily missed without close inspection; KOH preparation or fungal culture can confirm. Empiric topical antifungal may be diagnostic and therapeutic."
+          },
+          {
+            "condition": "Eczematous dermatitis (atopic or contact)",
+            "probability": 0.25,
+            "rationale": "Very common; presents with pruritic, erythematous, sometimes oozing or scaling patches. History of exposures, itch, chronicity, and response to emollients/steroids help differentiate from infection."
+          },
+          {
+            "condition": "Plaque psoriasis",
+            "probability": 0.15,
+            "rationale": "Well-demarcated, thick, silvery scaly plaques favor psoriasis. Nail changes or typical distribution (scalp, extensor surfaces) increase likelihood. Response to topical corticosteroids and vitamin D analogues is typical."
+          },
+          {
+            "condition": "Impetigo / superficial bacterial infection",
+            "probability": 0.1,
+            "rationale": "If lesions are crusted, purulent, rapidly spreading, or associated with systemic signs, a bacterial etiology (Staphylococcus/Streptococcus) is more likely and requires topical or systemic antibiotics."
+          },
+          {
+            "condition": "Cutaneous candidiasis or intertrigo",
+            "probability": 0.05,
+            "rationale": "Erythematous, macerated patches in skin folds with satellite pustules suggest Candida; KOH, culture, or response to topical azoles supports diagnosis."
+          }
+        ],
+        "culturalConsiderations": [
+          "Erythema and inflammation may be less obvious on darker skin tones; post-inflammatory hyperpigmentation and keloid tendency are important considerations.",
+          "Patients may use traditional or OTC topical remedies (herbal pastes, corticosteroid-containing creams) that alter lesion appearance and complicate diagnosis.",
+          "Modesty preferences, gender of the examiner, language, and health literacy can affect history-taking and willingness to show or seek care for skin lesions."
+        ],
+        "recommendations": [
+          "Obtain high-quality clinical photographs (multiple angles, close-up with scale/ruler, good lighting) or arrange in-person dermatologic examination.",
+          "Provide a focused history: onset, evolution, symptoms (itch, pain), prior treatments, recent exposures/travel, associated systemic symptoms, and past dermatologic conditions.",
+          "If lesions are scaly and annular, perform a KOH preparation to evaluate for dermatophytes; consider a trial of topical antifungal for 2 weeks if KOH not immediately available.",
+          "Avoid empiric potent topical corticosteroids until infection is reasonably excluded; consider gentle emollients and, if eczematous, a low-to-moderate potency steroid short term under supervision.",
+          "If there are signs of secondary bacterial infection (purulence, spreading erythema, fever), seek urgent in-person care for possible cultures and systemic antibiotics.",
+          "Refer to dermatology for persistent, atypical, rapidly changing, or treatment-refractory lesions; consider skin biopsy when malignancy or diagnostic uncertainty remains."
+        ]
+      }
+    }
+  },
+  {
+    "id": 1759769798163,
+    "createdAt": "2025-10-06T16:56:38.163Z",
+    "payload": {
+      "modelOutput": "{\n  \"summary\": \"Image and context limited (demo). Lesion appears consistent with an eczematous dermatitis pattern — erythematous, scaly, possibly pruritic patches with variable lichenification. Given limited data, contact or irritant dermatitis is favored but fungal and psoriasiform conditions remain possible.\",\n  \"primaryDiagnosis\": {\n    \"condition\": \"Eczematous dermatitis (probable irritant/contact dermatitis)\",\n    \"confidence\": 0.45,\n    \"severity\": \"mild-to-moderate\",\n    \"description\": \"Clinical appearance suggests erythematous, scaly patches with some crusting/lichenification consistent with eczematous inflammation. Distribution and history not provided; pruritus is commonly associated. Findings are nonspecific and overlap with other inflammatory or infectious dermatoses.\"\n  },\n  \"differentials\": [\n    {\n      \"condition\": \"Tinea corporis (dermatophytosis)\",\n      \"probability\": 0.20,\n      \"rationale\": \"Annular scaling and peripheral scale can mimic eczema; fungal infection should be considered when borders are well-demarcated or if topical steroids worsen lesions.\"\n    },\n    {\n      \"condition\": \"Plaque psoriasis\",\n      \"probability\": 0.18,\n      \"rationale\": \"Well‑demarcated erythematous plaques with silvery scale can resemble eczema in some presentations, particularly if there is lichenification. Distribution and chronicity help differentiate.\"\n    },\n    {\n      \"condition\": \"Allergic contact dermatitis\",\n      \"probability\": 0.12,\n      \"rationale\": \"Similar clinical appearance to irritant dermatitis; consider if onset follows exposure to new product, jewelry, topical agent, or occupational exposure.\"\n    },\n    {\n      \"condition\": \"Secondary bacterial infection (impetiginized eczema)\",\n      \"probability\": 0.05,\n      \"rationale\": \"Crusting, increased erythema or pustules suggest secondary infection; consider if lesions are exudative, painful, or systemic signs present.\"\n    }\n  ],\n  \"culturalConsiderations\": [\n    \"In darker skin tones, erythema may be less apparent and post-inflammatory hyperpigmentation or hypopigmentation may be the dominant concern; counsel about pigment changes and prolonged recovery.\",\n    \"Traditional or topical remedies (herbal, oils, bleaching agents) may alter appearance or cause irritant/contact dermatitis; ask about home treatments.\",\n    \"Access to dermatology and patch testing may be limited in some communities; offer practical first-line treatments and clear follow-up plans.\",\n    \"Scarring and keloid risk varies by ethnicity; emphasize gentle skin care and avoidance of unnecessary trauma or potent corticosteroids without supervision.\"\n  ],\n  \"recommendations\": [\n    \"Arrange an in-person dermatologic evaluation for full history, distribution assessment, and dermoscopic/clinical exam.\",\n    \"Perform diagnostic tests as indicated: KOH preparation and fungal culture if tinea suspected; consider bacterial swab if purulent/exudative signs present.\",\n    \"Initial conservative treatment: regular emollient use, avoidance of known or suspected irritants, and a short course of low-to-medium potency topical corticosteroid to affected areas if no infection suspected.\",\n    \"If contact allergy is suspected or dermatitis is recurrent/chronic, consider referral for patch testing.\",\n    \"Advise discontinuing new topical products or cosmetics until evaluation; avoid occlusion and vigorous scrubbing.\",\n    \"Seek urgent care if rapid spread, systemic symptoms (fever, malaise), increasing pain, or signs of widespread infection occur.\"\n  ]\n}",
+      "parsed": {
+        "summary": "Image and context limited (demo). Lesion appears consistent with an eczematous dermatitis pattern — erythematous, scaly, possibly pruritic patches with variable lichenification. Given limited data, contact or irritant dermatitis is favored but fungal and psoriasiform conditions remain possible.",
+        "primaryDiagnosis": {
+          "condition": "Eczematous dermatitis (probable irritant/contact dermatitis)",
+          "confidence": 0.45,
+          "severity": "mild-to-moderate",
+          "description": "Clinical appearance suggests erythematous, scaly patches with some crusting/lichenification consistent with eczematous inflammation. Distribution and history not provided; pruritus is commonly associated. Findings are nonspecific and overlap with other inflammatory or infectious dermatoses."
+        },
+        "differentials": [
+          {
+            "condition": "Tinea corporis (dermatophytosis)",
+            "probability": 0.2,
+            "rationale": "Annular scaling and peripheral scale can mimic eczema; fungal infection should be considered when borders are well-demarcated or if topical steroids worsen lesions."
+          },
+          {
+            "condition": "Plaque psoriasis",
+            "probability": 0.18,
+            "rationale": "Well‑demarcated erythematous plaques with silvery scale can resemble eczema in some presentations, particularly if there is lichenification. Distribution and chronicity help differentiate."
+          },
+          {
+            "condition": "Allergic contact dermatitis",
+            "probability": 0.12,
+            "rationale": "Similar clinical appearance to irritant dermatitis; consider if onset follows exposure to new product, jewelry, topical agent, or occupational exposure."
+          },
+          {
+            "condition": "Secondary bacterial infection (impetiginized eczema)",
+            "probability": 0.05,
+            "rationale": "Crusting, increased erythema or pustules suggest secondary infection; consider if lesions are exudative, painful, or systemic signs present."
+          }
+        ],
+        "culturalConsiderations": [
+          "In darker skin tones, erythema may be less apparent and post-inflammatory hyperpigmentation or hypopigmentation may be the dominant concern; counsel about pigment changes and prolonged recovery.",
+          "Traditional or topical remedies (herbal, oils, bleaching agents) may alter appearance or cause irritant/contact dermatitis; ask about home treatments.",
+          "Access to dermatology and patch testing may be limited in some communities; offer practical first-line treatments and clear follow-up plans.",
+          "Scarring and keloid risk varies by ethnicity; emphasize gentle skin care and avoidance of unnecessary trauma or potent corticosteroids without supervision."
+        ],
+        "recommendations": [
+          "Arrange an in-person dermatologic evaluation for full history, distribution assessment, and dermoscopic/clinical exam.",
+          "Perform diagnostic tests as indicated: KOH preparation and fungal culture if tinea suspected; consider bacterial swab if purulent/exudative signs present.",
+          "Initial conservative treatment: regular emollient use, avoidance of known or suspected irritants, and a short course of low-to-medium potency topical corticosteroid to affected areas if no infection suspected.",
+          "If contact allergy is suspected or dermatitis is recurrent/chronic, consider referral for patch testing.",
+          "Advise discontinuing new topical products or cosmetics until evaluation; avoid occlusion and vigorous scrubbing.",
+          "Seek urgent care if rapid spread, systemic symptoms (fever, malaise), increasing pain, or signs of widespread infection occur."
+        ]
+      }
+    }
+  }
+]

@@ -52,7 +52,24 @@ export function buildPrompt(input: ModelInput) {
   "recommendations": [ string ]
 }`;
 
-  const payload = JSON.stringify(input);
+  // Sanitize imageBase64 if present to avoid sending huge base64 blobs to the model
+  const safeInput: ModelInput = { ...input };
+  if (safeInput.imageBase64 && typeof safeInput.imageBase64 === 'string') {
+    const raw = safeInput.imageBase64;
+    // If it's a data URL, estimate size from base64 length
+    const isDataUrl = raw.startsWith('data:');
+    if (isDataUrl) {
+      // Extract only the first 64 chars for debugging and provide length info
+      const b64 = raw.split(',')[1] ?? '';
+      const byteLength = Math.floor((b64.length * 3) / 4);
+      safeInput.imageBase64 = `"<BASE64_OMITTED; bytes=${byteLength}>"`;
+    } else {
+      // Non-data-url long strings: replace with a short placeholder
+      safeInput.imageBase64 = '"<IMAGE_OMITTED>"';
+    }
+  }
+
+  const payload = JSON.stringify(safeInput);
 
   return `${instruction}${schema}\n\nInput:\n${payload}\n\nRespond with valid JSON only.`;
 }
