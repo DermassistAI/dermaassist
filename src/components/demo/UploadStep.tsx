@@ -3,6 +3,7 @@ import { Camera, Upload, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import Image from "next/image";
 
 export default function UploadStep({ uploadedImage, onUpload, onContinue }: { uploadedImage: string | null; onUpload: (e: React.ChangeEvent<HTMLInputElement>) => void; onContinue: () => void; }) {
   return (
@@ -10,11 +11,16 @@ export default function UploadStep({ uploadedImage, onUpload, onContinue }: { up
       <div className="border-2 border-dashed border-border rounded-lg p-12 text-center hover:border-primary/50 transition-colors">
         {uploadedImage ? (
           <div className="space-y-4">
-            <img 
-              src={uploadedImage} 
-              alt="Uploaded skin condition"
-              className="max-h-64 mx-auto rounded-lg shadow-soft"
-            />
+            <div className="mx-auto rounded-lg shadow-soft overflow-hidden max-h-64">
+              <Image
+                src={uploadedImage as string}
+                alt="Uploaded skin condition"
+                width={600}
+                height={400}
+                className="w-auto h-auto max-h-64 object-contain"
+                unoptimized
+              />
+            </div>
             <div className="flex items-center justify-center gap-2 text-sage-green">
               <CheckCircle className="h-5 w-5" />
               <span className="font-medium">Image uploaded successfully</span>
