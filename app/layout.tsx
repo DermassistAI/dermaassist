@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClientProvider } from "@/components/providers/QueryClientProvider";
@@ -34,7 +33,6 @@ export default function RootLayout({
       <body>
         <QueryClientProvider>
           <TooltipProvider>
-            <Toaster />
             <Sonner />
             {children}
           </TooltipProvider>

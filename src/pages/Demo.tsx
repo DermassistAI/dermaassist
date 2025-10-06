@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Camera, User, Brain } from "lucide-react";
 import Header from "@/components/Header";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/components/ui/sonner";
 import ax from "@/lib/axClient";
 import { callModelText } from "@/lib/axHelpers";
 import type { ModelInput, ModelOutput } from "@/lib/axSignatures";
@@ -23,7 +23,7 @@ const Demo = () => {
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [modelOutput, setModelOutput] = useState<string | null>(null);
   const [parsedOutput, setParsedOutput] = useState<ModelOutput | null>(null);
-  const { toast } = useToast();
+  // using Sonner's toast (client component) instead of custom useToast
 
   // The demo uses live Azure OpenAI model output for results.
   // We keep a small textual fallback for the AI summary display if parsing fails.
@@ -35,10 +35,7 @@ const Demo = () => {
       const reader = new FileReader();
       reader.onload = (e) => {
         setUploadedImage(e.target?.result as string);
-        toast({
-          title: "Image uploaded successfully",
-          description: "Ready to proceed to patient history",
-        });
+        toast("Image uploaded successfully");
       };
       reader.readAsDataURL(file);
     }
@@ -91,8 +88,8 @@ const Demo = () => {
               }
 
               setCurrentStep('results');
-            } catch (e) {
-              toast({ title: 'AI Error', description: String(e), variant: 'destructive' });
+              } catch (e) {
+              toast(String(e), { description: 'AI Error' });
               setCurrentStep('results');
             }
           }, 500);
