@@ -30,10 +30,7 @@
     "db:seed": "prisma db seed",
     "db:format": "prisma format",
     "db:validate": "prisma validate",
-    "postinstall": "prisma generate"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "postinstall": "prisma generate || echo 'Prisma generation skipped'"
   },
   "dependencies": {
     "@ax-llm/ax": "^14.0.26",
