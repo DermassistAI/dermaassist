@@ -8,6 +8,9 @@ import type { IAIProvider, ProviderConfig, ProviderType } from './types';
 import { AzureOpenAIProvider } from './AzureOpenAIProvider';
 import { GoogleGeminiProvider } from './GoogleGeminiProvider';
 import { GroqProvider } from './GroqProvider';
+import { ClaudeProvider } from './ClaudeProvider';
+import { OpenAIProvider } from './OpenAIProvider';
+import { QwenProvider } from './QwenProvider';
 
 export class AIProviderFactory {
   /**
@@ -22,6 +25,12 @@ export class AIProviderFactory {
         return new GoogleGeminiProvider();
       case 'groq':
         return new GroqProvider();
+      case 'claude':
+        return new ClaudeProvider();
+      case 'openai':
+        return new OpenAIProvider();
+      case 'qwen':
+        return new QwenProvider();
       default:
         throw new Error(`Unknown provider type: ${(config as any).type}`);
     }
@@ -47,8 +56,21 @@ export class AIProviderFactory {
         return GoogleGeminiProvider as any;
       case 'groq':
         return GroqProvider as any;
+      case 'claude':
+        return ClaudeProvider as any;
+      case 'openai':
+        return OpenAIProvider as any;
+      case 'qwen':
+        return QwenProvider as any;
       default:
         throw new Error(`Unknown provider type: ${type}`);
     }
+  }
+
+  /**
+   * Get list of all available provider types
+   */
+  static getAvailableProviders(): ProviderType[] {
+    return ['azure-openai', 'google-gemini', 'groq', 'claude', 'openai', 'qwen'];
   }
 }

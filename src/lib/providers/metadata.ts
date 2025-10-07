@@ -61,12 +61,12 @@ export const PROVIDER_METADATA: Record<ProviderType, ProviderMetadata> = {
       {
         key: 'model',
         label: 'Model',
-        placeholder: 'gemini-1.5-flash',
+        placeholder: 'gemini-2.0-flash-exp',
         type: 'text',
         required: true,
       },
     ],
-    models: ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash'],
+    models: ['gemini-2.0-flash-exp', 'gemini-1.5-flash', 'gemini-1.5-pro'],
   },
   'groq': {
     type: 'groq',
@@ -89,6 +89,84 @@ export const PROVIDER_METADATA: Record<ProviderType, ProviderMetadata> = {
       },
     ],
     models: ['llama-3.3-70b-versatile', 'mixtral-8x7b-32768', 'llama-3.1-70b-versatile'],
+  },
+  'claude': {
+    type: 'claude',
+    name: 'Claude (Anthropic)',
+    description: 'Anthropic Claude models with advanced reasoning',
+    requiredFields: [
+      {
+        key: 'apiKey',
+        label: 'API Key',
+        placeholder: 'Enter your Anthropic API key (sk-ant-...)',
+        type: 'password',
+        required: true,
+      },
+      {
+        key: 'model',
+        label: 'Model',
+        placeholder: 'claude-3-5-sonnet-20241022',
+        type: 'text',
+        required: true,
+      },
+    ],
+    models: [
+      'claude-3-5-sonnet-20241022',
+      'claude-3-opus-20240229',
+      'claude-3-sonnet-20240229',
+      'claude-3-haiku-20240307',
+    ],
+  },
+  'openai': {
+    type: 'openai',
+    name: 'OpenAI',
+    description: 'OpenAI GPT-4o and GPT-4o-mini models',
+    requiredFields: [
+      {
+        key: 'apiKey',
+        label: 'API Key',
+        placeholder: 'Enter your OpenAI API key (sk-...)',
+        type: 'password',
+        required: true,
+      },
+      {
+        key: 'model',
+        label: 'Model',
+        placeholder: 'gpt-4o',
+        type: 'text',
+        required: true,
+      },
+    ],
+    models: ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-3.5-turbo'],
+  },
+  'qwen': {
+    type: 'qwen',
+    name: 'Qwen',
+    description: 'Alibaba Cloud Qwen models with multilingual support',
+    requiredFields: [
+      {
+        key: 'apiKey',
+        label: 'API Key',
+        placeholder: 'Enter your Qwen/DashScope API key',
+        type: 'password',
+        required: true,
+      },
+      {
+        key: 'model',
+        label: 'Model',
+        placeholder: 'qwen-max',
+        type: 'text',
+        required: true,
+      },
+      {
+        key: 'endpoint',
+        label: 'Endpoint (optional)',
+        placeholder: 'https://dashscope.aliyuncs.com/api/v1/...',
+        type: 'text',
+        required: false,
+      },
+    ],
+    models: ['qwen-max', 'qwen-plus', 'qwen-turbo', 'qwen-max-longcontext'],
   },
 };
 
@@ -133,6 +211,40 @@ export class ProviderConfigValidator implements IProviderConfigValidator {
       case 'groq':
         if (!config.model || config.model.trim() === '') {
           errors.push('Model is required for Groq');
+        }
+        break;
+
+      case 'claude':
+        if (!config.model || config.model.trim() === '') {
+          errors.push('Model is required for Claude');
+        }
+        // Validate API key format
+        if (config.apiKey && !config.apiKey.startsWith('sk-ant-')) {
+          errors.push('Claude API key should start with "sk-ant-"');
+        }
+        break;
+
+      case 'openai':
+        if (!config.model || config.model.trim() === '') {
+          errors.push('Model is required for OpenAI');
+        }
+        // Validate API key format
+        if (config.apiKey && !config.apiKey.startsWith('sk-')) {
+          errors.push('OpenAI API key should start with "sk-"');
+        }
+        break;
+
+      case 'qwen':
+        if (!config.model || config.model.trim() === '') {
+          errors.push('Model is required for Qwen');
+        }
+        // Validate endpoint if provided
+        if (config.endpoint) {
+          try {
+            new URL(config.endpoint);
+          } catch {
+            errors.push('Endpoint must be a valid URL');
+          }
         }
         break;
     }

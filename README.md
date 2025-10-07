@@ -37,17 +37,38 @@ pnpm build
 
 ## 🤖 Multi-Provider AI Support
 
-DermAssist now supports multiple AI providers, allowing you to choose the best model for your needs:
+DermAssist now supports **six AI providers**, allowing you to choose the best model for your needs:
 
-- **Azure OpenAI** - Enterprise-grade GPT-4o models
-- **Google Gemini** - Fast, cost-effective AI via Google AI Studio
-- **Groq** - Ultra-fast inference with LLaMA and Mixtral
+- **Claude (Anthropic)** - Advanced reasoning with Claude Sonnet 3.5, Opus, and Haiku
+- **OpenAI** - GPT-4o, GPT-4o-mini for comprehensive analysis
+- **Google Gemini** - Fast, cost-effective AI via Google AI Studio (Gemini 2.0 Flash)
+- **Azure OpenAI** - Enterprise-grade GPT-4o models with Microsoft Azure
+- **Groq** - Ultra-fast inference with LLaMA 3.3 and Mixtral
+- **Qwen** - Multilingual support with Alibaba Cloud's Qwen models
 
 **[📖 Complete Setup Guide](./MULTI_PROVIDER_SETUP.md)** - Detailed instructions for configuring each provider
 
 ### Quick Configuration
 
-Choose ONE provider and add to your `.env` file:
+Choose ONE or MORE providers and add to your `.env` file:
+
+**Claude (Recommended for clinical analysis):**
+```bash
+ANTHROPIC_API_KEY=your_key
+CLAUDE_MODEL=claude-3-5-sonnet-20241022
+```
+
+**OpenAI:**
+```bash
+OPENAI_API_KEY=your_key
+OPENAI_MODEL=gpt-4o
+```
+
+**Google Gemini:**
+```bash
+GOOGLE_GEMINI_API_KEY=your_key
+GEMINI_MODEL=gemini-2.0-flash-exp
+```
 
 **Azure OpenAI:**
 ```bash
@@ -56,16 +77,16 @@ AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com
 AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
 ```
 
-**Google Gemini:**
-```bash
-GOOGLE_GEMINI_API_KEY=your_key
-GOOGLE_GEMINI_MODEL=gemini-1.5-flash
-```
-
 **Groq:**
 ```bash
 GROQ_API_KEY=your_key
 GROQ_MODEL=llama-3.3-70b-versatile
+```
+
+**Qwen:**
+```bash
+QWEN_API_KEY=your_key
+QWEN_MODEL=qwen-max
 ```
 
 ## 💾 Supabase Storage (Optional)
@@ -99,9 +120,41 @@ Built with SOLID principles:
 
 ## 📚 Documentation
 
-- **[Multi-Provider Setup Guide](./MULTI_PROVIDER_SETUP.md)** - Complete guide for AI provider configuration
-- **[Supabase Schema](./supabase/schema.sql)** - Database setup for Supabase
-- **[Migration Summary](./MIGRATION_SUMMARY.md)** - Next.js migration details
+DermAssist documentation is organized using the **MECE framework** (Mutually Exclusive, Collectively Exhaustive) for comprehensive, non-overlapping coverage.
+
+### Quick Navigation
+
+**For Healthcare Providers:**
+- **[Getting Started](./docs/user-guides/getting-started.md)** - First-time setup and onboarding
+- **[Healthcare Provider Guide](./docs/user-guides/healthcare-provider-guide.md)** - Complete guide for medical professionals
+- **[Submission Guide](./docs/user-guides/submission-guide.md)** - Step-by-step case submission
+
+**For Developers:**
+- **[Setup Guide](./docs/technical/setup-guide.md)** - Development environment and dependencies
+- **[Database Guide](./docs/technical/database-guide.md)** - Prisma ORM, schema, and migrations
+- **[Testing Guide](./docs/technical/testing-guide.md)** - Unit, integration, and E2E testing
+- **[API Reference](./docs/technical/api-reference.md)** - Endpoints and integration
+
+**For Designers:**
+- **[Design Specification](./docs/design/figma-specification.md)** - Complete Figma Make design spec
+- **[Design System](./docs/design/design-system.md)** - Components, colors, typography
+- **[User Flows](./docs/design/user-flows.md)** - Interaction patterns
+
+**Quick Reference:**
+- **[AI Providers Reference](./docs/reference/ai-providers-reference.md)** - Comparison of all 6 AI providers
+- **[Architecture Overview](./docs/reference/architecture-overview.md)** - System architecture and SOLID principles
+- **[ICD-11 Quick Reference](./docs/reference/icd11-reference.md)** - Common dermatological codes
+
+**[📂 Complete Documentation Index](./docs/README.md)** - Full MECE-organized documentation structure
+
+### Legacy Documentation
+
+The following root-level docs are maintained for backward compatibility:
+- **[SETUP.md](./SETUP.md)** - Moved to `docs/technical/setup-guide.md`
+- **[TESTING.md](./TESTING.md)** - Moved to `docs/technical/testing-guide.md`
+- **[kombai.md](./kombai.md)** - Moved to `docs/design/figma-specification.md`
+- **[MULTI_PROVIDER_SETUP.md](./MULTI_PROVIDER_SETUP.md)** - Merged into setup guide
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Moved to `docs/reference/architecture-overview.md`
 
 ## 🛠️ Development
 
@@ -120,7 +173,36 @@ pnpm start
 
 # Run linter
 pnpm lint
+
+# Run tests
+pnpm test
+
+# Run tests with coverage
+pnpm test:coverage
+
+# Run tests in watch mode
+pnpm test:watch
 ```
+
+### Testing
+
+DermAssist includes comprehensive testing:
+
+```bash
+# Run all tests
+pnpm test
+
+# Run unit tests only
+pnpm test:unit
+
+# Run provider tests
+pnpm test:providers
+
+# Run with UI
+pnpm test:ui
+```
+
+See **[TESTING.md](./TESTING.md)** for complete testing documentation.
 
 ## 📦 Tech Stack
 
