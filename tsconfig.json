@@ -32,7 +32,6 @@
       "@/*": ["./src/*"],
       "@/app/*": ["./app/*"]
     },
-    "ignoreDeprecations": "6.0",
     
     /* Next.js specific */
     "plugins": [

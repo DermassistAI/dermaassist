@@ -10,6 +10,9 @@ export type {
   AzureOpenAIConfig,
   GoogleGeminiConfig,
   GroqConfig,
+  ClaudeConfig,
+  OpenAIConfig,
+  QwenConfig,
   ProviderConfig,
   IAIProvider,
   IProviderConfigValidator,
@@ -23,6 +26,9 @@ export { BaseAIProvider } from './BaseAIProvider';
 export { AzureOpenAIProvider } from './AzureOpenAIProvider';
 export { GoogleGeminiProvider } from './GoogleGeminiProvider';
 export { GroqProvider } from './GroqProvider';
+export { ClaudeProvider } from './ClaudeProvider';
+export { OpenAIProvider } from './OpenAIProvider';
+export { QwenProvider } from './QwenProvider';
 
 // Factory
 export { AIProviderFactory } from './AIProviderFactory';

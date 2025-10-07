@@ -3,7 +3,7 @@
  * Following Interface Segregation Principle (ISP) - focused, specific interfaces
  */
 
-export type ProviderType = 'azure-openai' | 'google-gemini' | 'groq';
+export type ProviderType = 'azure-openai' | 'google-gemini' | 'groq' | 'claude' | 'openai' | 'qwen';
 
 /**
  * Base configuration for all AI providers
@@ -40,9 +40,46 @@ export interface GroqConfig extends BaseProviderConfig {
 }
 
 /**
+ * Claude (Anthropic) specific configuration
+ */
+export interface ClaudeConfig extends BaseProviderConfig {
+  type: 'claude';
+  model: string; // e.g., 'claude-3-5-sonnet-20241022', 'claude-3-opus-20240229'
+  maxTokens?: number;
+  temperature?: number;
+}
+
+/**
+ * OpenAI specific configuration
+ */
+export interface OpenAIConfig extends BaseProviderConfig {
+  type: 'openai';
+  model: string; // e.g., 'gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo'
+  maxTokens?: number;
+  temperature?: number;
+}
+
+/**
+ * Qwen specific configuration
+ */
+export interface QwenConfig extends BaseProviderConfig {
+  type: 'qwen';
+  model: string; // e.g., 'qwen-max', 'qwen-plus', 'qwen-turbo'
+  endpoint?: string;
+  maxTokens?: number;
+  temperature?: number;
+}
+
+/**
  * Union type of all provider configurations
  */
-export type ProviderConfig = AzureOpenAIConfig | GoogleGeminiConfig | GroqConfig;
+export type ProviderConfig = 
+  | AzureOpenAIConfig 
+  | GoogleGeminiConfig 
+  | GroqConfig 
+  | ClaudeConfig 
+  | OpenAIConfig 
+  | QwenConfig;
 
 /**
  * AI Provider interface following Single Responsibility Principle (SRP)
