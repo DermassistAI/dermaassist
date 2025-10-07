@@ -62,6 +62,7 @@ export default function DemoPage() {
               const apiJson = await apiRes.json()
               if (apiJson?.error) throw new Error(apiJson.error)
               const text = apiJson?.text ?? ''
+              const providerName = apiJson?.providerName || 'unknown'
               setAnalysisProgress(100)
               setModelOutput(String(text))
 
@@ -82,7 +83,12 @@ export default function DemoPage() {
                 const res = await fetch('/api/results', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ modelOutput: String(text), parsed }),
+                  body: JSON.stringify({ 
+                    modelOutput: String(text), 
+                    parsed,
+                    providerName,
+                    imageUrl: uploadedImage,
+                  }),
                 })
                 if (res.ok) {
                   toast('Results saved')

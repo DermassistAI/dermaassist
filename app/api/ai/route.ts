@@ -2,6 +2,51 @@ import { NextResponse } from 'next/server'
 import axClient from '@/lib/axClient'
 import { callModelText } from '@/lib/axHelpers'
 import { buildPrompt } from '@/lib/axSignatures'
+import { AIProviderFactory, type ProviderConfig } from '@/lib/providers'
+
+/**
+ * Get provider configuration from environment variables
+ * Follows Dependency Inversion Principle - depends on ProviderConfig abstraction
+ */
+function getProviderConfigFromEnv(): ProviderConfig {
+  // Check for Google Gemini configuration
+  const geminiApiKey = process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+  if (geminiApiKey) {
+    return {
+      type: 'google-gemini',
+      apiKey: geminiApiKey,
+      model: process.env.GOOGLE_GEMINI_MODEL || 'gemini-1.5-flash',
+    };
+  }
+
+  // Check for Groq configuration
+  const groqApiKey = process.env.GROQ_API_KEY;
+  if (groqApiKey) {
+    return {
+      type: 'groq',
+      apiKey: groqApiKey,
+      model: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+    };
+  }
+
+  // Default to Azure OpenAI (existing configuration)
+  const azureApiKey = process.env.AZURE_OPENAI_API_KEY;
+  const azureEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
+  const azureDeployment = process.env.AZURE_OPENAI_DEPLOYMENT || 'gpt-4o-mini';
+  const azureApiVersion = process.env.AZURE_OPENAI_API_VERSION || '2024-02-15-preview';
+
+  if (!azureApiKey || !azureEndpoint) {
+    throw new Error('No AI provider configured. Set environment variables for Azure OpenAI, Google Gemini, or Groq.');
+  }
+
+  return {
+    type: 'azure-openai',
+    apiKey: azureApiKey,
+    endpoint: azureEndpoint,
+    deployment: azureDeployment,
+    apiVersion: azureApiVersion,
+  };
+}
 
 export async function POST(req: Request) {
   try {
@@ -12,10 +57,14 @@ export async function POST(req: Request) {
   // Build sanitized prompt server-side to avoid sending large base64 images
   const prompt = buildPrompt(input)
 
-  // Create server-side client using environment vars (kept secret)
-  const client = axClient.createDefaultClient()
+  // Use provider factory to create and initialize the appropriate provider
+  // Following Factory Pattern and Dependency Inversion Principle
+  const config = getProviderConfigFromEnv();
+  const provider = await AIProviderFactory.createAndInitialize(config);
+  
+  console.log(`Using AI provider: ${provider.getName()}`);
 
-    const text = await callModelText(client, String(prompt))
+    const text = await provider.generateResponse(String(prompt))
 
     // Try to parse the model response as JSON matching ModelOutput
     let parsed: any = null
@@ -41,7 +90,7 @@ export async function POST(req: Request) {
       }
     }
 
-    return NextResponse.json({ text, parsed })
+    return NextResponse.json({ text, parsed, providerName: provider.getName() })
   } catch (err: any) {
     console.error('API /api/ai error:', err)
     return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 })

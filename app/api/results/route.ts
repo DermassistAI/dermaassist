@@ -1,26 +1,68 @@
 import { NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
+import { getAnalysisResultsRepository, type AnalysisResult } from '@/lib/supabase'
 
+/**
+ * API Route for saving analysis results
+ * Uses Repository Pattern following Dependency Inversion Principle (DIP)
+ * Works with both Supabase (when configured) and file storage (fallback)
+ */
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const repoRoot = path.resolve(process.cwd())
-    const dataDir = path.join(repoRoot, 'data')
-    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true })
-
-    const outPath = path.join(dataDir, 'results.json')
-    let arr: any[] = []
-    if (fs.existsSync(outPath)) {
-      try { arr = JSON.parse(fs.readFileSync(outPath, 'utf8')) } catch (e) { arr = [] }
+    
+    // Get the appropriate repository implementation (Supabase or File)
+    const repository = getAnalysisResultsRepository()
+    
+    // Create analysis result object
+    const result: AnalysisResult = {
+      provider_name: body.providerName || 'unknown',
+      model_output: body.modelOutput || '',
+      parsed_output: body.parsed || null,
+      image_url: body.imageUrl || null,
+      metadata: body.metadata || {},
     }
 
-    arr.push({ id: Date.now(), createdAt: new Date().toISOString(), payload: body })
-    fs.writeFileSync(outPath, JSON.stringify(arr, null, 2), 'utf8')
-
-    return NextResponse.json({ ok: true })
+    // Save using repository
+    const saveResult = await repository.save(result)
+    
+    if (saveResult.success) {
+      return NextResponse.json({ ok: true })
+    } else {
+      return NextResponse.json(
+        { error: saveResult.error || 'Failed to save results' },
+        { status: 500 }
+      )
+    }
   } catch (err: any) {
     console.error('/api/results error', err)
+    return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 })
+  }
+}
+
+/**
+ * GET endpoint to retrieve results
+ */
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url)
+    const id = searchParams.get('id')
+    const limit = parseInt(searchParams.get('limit') || '100', 10)
+    
+    const repository = getAnalysisResultsRepository()
+    
+    if (id) {
+      const result = await repository.getById(id)
+      if (result) {
+        return NextResponse.json(result)
+      } else {
+        return NextResponse.json({ error: 'Result not found' }, { status: 404 })
+      }
+    } else {
+      const results = await repository.getAll(limit)
+      return NextResponse.json({ results })
+    }
+  } catch (err: any) {
+    console.error('/api/results GET error', err)
     return NextResponse.json({ error: String(err?.message ?? err) }, { status: 500 })
   }
 }
