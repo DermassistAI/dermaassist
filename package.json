@@ -19,11 +19,26 @@
     "test:integration": "vitest run --dir tests/integration",
     "test:providers": "vitest run --dir tests/unit/providers",
     "test:provider": "vitest run --grep",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:pull": "prisma db pull",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:migrate:reset": "prisma migrate reset",
+    "db:studio": "prisma studio",
+    "db:seed": "prisma db seed",
+    "db:format": "prisma format",
+    "db:validate": "prisma validate",
+    "postinstall": "prisma generate"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@ax-llm/ax": "^14.0.26",
     "@hookform/resolvers": "^3.10.0",
+    "@prisma/client": "^6.17.0",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-aspect-ratio": "^1.1.7",
@@ -96,6 +111,7 @@
     "happy-dom": "^19.0.2",
     "msw": "^2.11.3",
     "postcss": "^8.5.6",
+    "prisma": "^6.17.0",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4",

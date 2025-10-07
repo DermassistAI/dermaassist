@@ -782,6 +782,659 @@ pnpm prisma migrate dev
 
 ---
 
+## Prisma ORM Setup
+
+DermAssist uses **Prisma ORM** for type-safe database access and schema management. Prisma provides a modern database toolkit with auto-completion, type-safety, and migrations.
+
+### Why Prisma?
+
+- **Type-Safety**: Auto-generated TypeScript types from your schema
+- **Migrations**: Version-controlled database schema changes
+- **Intuitive API**: Easy-to-use query builder
+- **Multi-Database**: Works with PostgreSQL, MySQL, SQLite, and more
+- **Introspection**: Generate schema from existing database
+
+### Initial Setup
+
+**1. Initialize Prisma**
+
+If not already initialized:
+
+```bash
+# Initialize Prisma in your project
+pnpm prisma init
+
+# This creates:
+# - prisma/schema.prisma (database schema)
+# - .env file with DATABASE_URL
+```
+
+**2. Configure Database Connection**
+
+Update your `.env` file:
+
+```bash
+# For Supabase
+DATABASE_URL="postgresql://postgres:[password]@db.[project-ref].supabase.co:5432/postgres?pgbouncer=true"
+
+# For local PostgreSQL
+DATABASE_URL="postgresql://user:password@localhost:5432/dermassist"
+
+# For production with connection pooling
+DATABASE_URL="postgresql://user:password@host:5432/database?connection_limit=10&pool_timeout=20"
+```
+
+**3. Define Your Schema**
+
+Edit `prisma/schema.prisma`:
+
+```prisma
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Healthcare Provider Model
+model Provider {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  licenseNumber   String   @unique
+  licenseState    String
+  licenseCountry  String
+  licenseExpiry   DateTime
+  licenseVerified Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relations
+  submissions     Submission[]
+  diagnoses       Diagnosis[]
+  
+  @@index([licenseNumber])
+  @@index([email])
+}
+
+// Patient Case Submission Model
+model Submission {
+  id              String   @id @default(cuid())
+  providerId      String
+  provider        Provider @relation(fields: [providerId], references: [id])
+  
+  // De-identified patient data
+  imageUrl        String
+  imageHash       String   @unique // For duplicate detection
+  
+  // Clinical information
+  duration        String? // How long patient has had condition
+  symptoms        String?
+  treatments      String?
+  
+  // AI Analysis
+  aiProvider      String // claude, openai, gemini, etc.
+  aiModel         String
+  aiResponse      Json? // Structured AI response
+  icd11Code       String?
+  confidence      Float?
+  
+  // Metadata
+  status          SubmissionStatus @default(PENDING)
+  qualityScore    Float?
+  reviewedBy      String?
+  reviewedAt      DateTime?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relations
+  diagnoses       Diagnosis[]
+  
+  @@index([providerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum SubmissionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  UNDER_REVIEW
+  APPROVED_FOR_PRACTICE
+}
+
+// Practice Feed Diagnosis Model
+model Diagnosis {
+  id            String   @id @default(cuid())
+  submissionId  String
+  submission    Submission @relation(fields: [submissionId], references: [id])
+  providerId    String
+  provider      Provider @relation(fields: [providerId], references: [id])
+  
+  icd11Code     String
+  notes         String?
+  confidence    Float?
+  
+  createdAt     DateTime @default(now())
+  
+  @@index([submissionId])
+  @@index([providerId])
+  @@index([icd11Code])
+}
+
+// Model Health Check Log
+model ModelHealthCheck {
+  id            String   @id @default(cuid())
+  provider      String // claude, openai, etc.
+  model         String
+  status        String // operational, degraded, down
+  responseTime  Float // in milliseconds
+  errorMessage  String?
+  checkedAt     DateTime @default(now())
+  
+  @@index([provider, model])
+  @@index([checkedAt])
+}
+```
+
+**4. Generate Prisma Client**
+
+After defining your schema:
+
+```bash
+# Generate TypeScript types and Prisma Client
+pnpm prisma generate
+
+# This creates node_modules/@prisma/client
+```
+
+**5. Create and Run Migrations**
+
+```bash
+# Create a new migration
+pnpm prisma migrate dev --name init
+
+# This will:
+# 1. Create SQL migration files in prisma/migrations/
+# 2. Apply migration to database
+# 3. Generate Prisma Client
+
+# For production
+pnpm prisma migrate deploy
+```
+
+### Common Prisma Commands
+
+#### Development
+
+```bash
+# Generate Prisma Client (after schema changes)
+pnpm prisma generate
+
+# Create and apply migration
+pnpm prisma migrate dev --name add_new_field
+
+# Reset database (WARNING: deletes all data)
+pnpm prisma migrate reset
+
+# View and manage database with Prisma Studio
+pnpm prisma studio
+```
+
+#### Database Management
+
+```bash
+# Push schema changes without migration (useful for prototyping)
+pnpm prisma db push
+
+# Pull schema from existing database
+pnpm prisma db pull
+
+# Seed database with test data
+pnpm prisma db seed
+```
+
+#### Production
+
+```bash
+# Apply migrations in production
+pnpm prisma migrate deploy
+
+# Validate schema
+pnpm prisma validate
+
+# Format schema file
+pnpm prisma format
+```
+
+### Using Prisma Client in Your Code
+
+**1. Create a Prisma Client Instance**
+
+Create `src/lib/prisma.ts`:
+
+```typescript
+import { PrismaClient } from '@prisma/client'
+
+// Prevent multiple instances in development
+const globalForPrisma = global as unknown as { prisma: PrismaClient }
+
+export const prisma =
+  globalForPrisma.prisma ||
+  new PrismaClient({
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  })
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+
+export default prisma
+```
+
+**2. CRUD Operations Examples**
+
+```typescript
+import { prisma } from '@/lib/prisma'
+
+// Create a provider
+async function createProvider(data: {
+  email: string
+  licenseNumber: string
+  licenseState: string
+  licenseCountry: string
+  licenseExpiry: Date
+}) {
+  return await prisma.provider.create({
+    data,
+  })
+}
+
+// Find provider by email
+async function getProviderByEmail(email: string) {
+  return await prisma.provider.findUnique({
+    where: { email },
+    include: { submissions: true }, // Include related submissions
+  })
+}
+
+// Create submission
+async function createSubmission(data: {
+  providerId: string
+  imageUrl: string
+  imageHash: string
+  aiProvider: string
+  aiModel: string
+}) {
+  return await prisma.submission.create({
+    data: {
+      ...data,
+      status: 'PENDING',
+    },
+  })
+}
+
+// Get submissions with filters
+async function getSubmissions(filters: {
+  status?: string
+  providerId?: string
+  skip?: number
+  take?: number
+}) {
+  return await prisma.submission.findMany({
+    where: {
+      status: filters.status,
+      providerId: filters.providerId,
+    },
+    include: {
+      provider: true,
+      diagnoses: true,
+    },
+    skip: filters.skip || 0,
+    take: filters.take || 10,
+    orderBy: { createdAt: 'desc' },
+  })
+}
+
+// Update submission with AI response
+async function updateSubmissionWithAI(
+  id: string,
+  aiResponse: any,
+  icd11Code: string,
+  confidence: number
+) {
+  return await prisma.submission.update({
+    where: { id },
+    data: {
+      aiResponse,
+      icd11Code,
+      confidence,
+      status: 'COMPLETED',
+    },
+  })
+}
+
+// Count submissions by status
+async function getSubmissionStats() {
+  const stats = await prisma.submission.groupBy({
+    by: ['status'],
+    _count: true,
+  })
+  return stats
+}
+
+// Get practice feed cases (approved submissions)
+async function getPracticeFeedCases(limit = 20) {
+  return await prisma.submission.findMany({
+    where: {
+      status: 'APPROVED_FOR_PRACTICE',
+    },
+    include: {
+      diagnoses: {
+        include: {
+          provider: {
+            select: {
+              id: true,
+              // Don't include identifying info
+            },
+          },
+        },
+      },
+    },
+    take: limit,
+    orderBy: { createdAt: 'desc' },
+  })
+}
+
+// Add diagnosis to practice case
+async function addDiagnosis(data: {
+  submissionId: string
+  providerId: string
+  icd11Code: string
+  notes?: string
+  confidence?: number
+}) {
+  return await prisma.diagnosis.create({
+    data,
+  })
+}
+
+// Get consensus on a case
+async function getConsensus(submissionId: string) {
+  const diagnoses = await prisma.diagnosis.findMany({
+    where: { submissionId },
+    include: {
+      provider: {
+        select: { id: true },
+      },
+    },
+  })
+
+  // Calculate consensus
+  const counts = diagnoses.reduce((acc, d) => {
+    acc[d.icd11Code] = (acc[d.icd11Code] || 0) + 1
+    return acc
+  }, {} as Record<string, number>)
+
+  const total = diagnoses.length
+  const consensus = Object.entries(counts).map(([code, count]) => ({
+    icd11Code: code,
+    count,
+    percentage: (count / total) * 100,
+  }))
+
+  return consensus.sort((a, b) => b.percentage - a.percentage)
+}
+```
+
+**3. Using in API Routes**
+
+Example `app/api/submissions/route.ts`:
+
+```typescript
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json()
+    
+    const submission = await prisma.submission.create({
+      data: {
+        providerId: body.providerId,
+        imageUrl: body.imageUrl,
+        imageHash: body.imageHash,
+        aiProvider: body.aiProvider,
+        aiModel: body.aiModel,
+        status: 'PROCESSING',
+      },
+    })
+
+    return NextResponse.json(submission)
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to create submission' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const status = searchParams.get('status')
+    
+    const submissions = await prisma.submission.findMany({
+      where: status ? { status } : {},
+      include: {
+        provider: {
+          select: {
+            email: true,
+            licenseNumber: true,
+          },
+        },
+      },
+      take: 50,
+      orderBy: { createdAt: 'desc' },
+    })
+
+    return NextResponse.json(submissions)
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to fetch submissions' },
+      { status: 500 }
+    )
+  }
+}
+```
+
+### Database Seeding
+
+Create `prisma/seed.ts`:
+
+```typescript
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+async function main() {
+  // Create test providers
+  const provider1 = await prisma.provider.create({
+    data: {
+      email: 'dr.smith@example.com',
+      licenseNumber: 'MD-12345',
+      licenseState: 'CA',
+      licenseCountry: 'USA',
+      licenseExpiry: new Date('2025-12-31'),
+      licenseVerified: true,
+    },
+  })
+
+  const provider2 = await prisma.provider.create({
+    data: {
+      email: 'dr.jones@example.com',
+      licenseNumber: 'MD-67890',
+      licenseState: 'NY',
+      licenseCountry: 'USA',
+      licenseExpiry: new Date('2026-06-30'),
+      licenseVerified: true,
+    },
+  })
+
+  // Create test submissions
+  await prisma.submission.create({
+    data: {
+      providerId: provider1.id,
+      imageUrl: 'https://example.com/image1.jpg',
+      imageHash: 'hash1',
+      aiProvider: 'claude',
+      aiModel: 'claude-3-5-sonnet-20241022',
+      status: 'APPROVED_FOR_PRACTICE',
+      icd11Code: 'L20.0',
+      confidence: 0.85,
+    },
+  })
+
+  console.log('Database seeded successfully')
+}
+
+main()
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
+```
+
+Add to `package.json`:
+
+```json
+{
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "scripts": {
+    "db:seed": "prisma db seed"
+  }
+}
+```
+
+Run seeding:
+
+```bash
+pnpm db:seed
+```
+
+### Prisma Studio
+
+Launch Prisma Studio to visually manage your database:
+
+```bash
+pnpm prisma studio
+```
+
+This opens a web interface at `http://localhost:5555` where you can:
+- View all tables and data
+- Add, edit, and delete records
+- Run queries visually
+- Explore relationships
+
+### Migration Best Practices
+
+1. **Always create migrations for schema changes**:
+   ```bash
+   pnpm prisma migrate dev --name descriptive_name
+   ```
+
+2. **Never edit migration files manually** - create new migrations instead
+
+3. **Test migrations locally** before deploying to production
+
+4. **Back up production database** before running migrations
+
+5. **Use meaningful migration names**:
+   - ✅ `add_provider_license_fields`
+   - ✅ `create_diagnosis_table`
+   - ❌ `migration_1`
+   - ❌ `update`
+
+### Troubleshooting
+
+**Issue: "Prisma Client not found"**
+
+Solution:
+```bash
+pnpm prisma generate
+```
+
+**Issue: "Database connection failed"**
+
+Solution:
+- Check `DATABASE_URL` in `.env`
+- Verify database is running
+- Check network connectivity
+- Ensure connection string format is correct
+
+**Issue: "Migration failed"**
+
+Solution:
+```bash
+# Reset database (WARNING: deletes data)
+pnpm prisma migrate reset
+
+# Or manually resolve conflicts
+pnpm prisma migrate resolve --applied <migration_name>
+```
+
+**Issue: "Type errors after schema change"**
+
+Solution:
+```bash
+# Regenerate Prisma Client
+pnpm prisma generate
+
+# Restart TypeScript server in VS Code
+Cmd/Ctrl + Shift + P → "TypeScript: Restart TS Server"
+```
+
+### Production Deployment
+
+**1. Set DATABASE_URL in production environment**
+
+**2. Run migrations**:
+```bash
+pnpm prisma migrate deploy
+```
+
+**3. Generate Prisma Client**:
+```bash
+pnpm prisma generate
+```
+
+**4. Optimize for production**:
+
+Set in `.env`:
+```bash
+# Enable connection pooling
+DATABASE_URL="postgresql://user:pass@host:5432/db?connection_limit=10&pool_timeout=20"
+
+# For serverless (e.g., Vercel)
+DATABASE_URL="postgresql://user:pass@host:5432/db?pgbouncer=true&connection_limit=1"
+```
+
+### Additional Resources
+
+- **Prisma Docs**: https://www.prisma.io/docs
+- **Prisma Examples**: https://github.com/prisma/prisma-examples
+- **Prisma Discord**: https://pris.ly/discord
+- **Schema Reference**: https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference
+
+---
+
 ## Development Environment
 
 ### Environment Variables

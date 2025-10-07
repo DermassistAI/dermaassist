@@ -14,17 +14,42 @@ DermAssist is an Afrocentric digital dermatology research platform that enables 
 
 ## User Personas
 
-### 1. Research Participant (Primary User)
-- **Goal**: Submit de-identified skin condition data for research
-- **Technical Skill**: Low to Medium
-- **Context**: Using mobile or desktop, may be in clinic or at home
-- **Needs**: Simple, guided process; privacy assurance; engaging interface
+### 1. Healthcare Provider (Primary User)
+- **Goal**: Capture patient skin conditions, de-identify data, and submit for AI analysis and research
+- **Technical Skill**: Medium
+- **Context**: Clinical setting with patients, using mobile or desktop
+- **Profile**: Licensed healthcare provider with current valid medical license stored in system
+- **Primary Activities**:
+  - Take photos of patient skin conditions during consultations
+  - De-identify patient data through conversational AI or gamified form interface
+  - Answer diagnostic questions to aid AI analysis
+  - Submit de-identified cases for research database
+  - Practice diagnostic skills by reviewing anonymized cases in feed
+  - Participate in consensus-based diagnostic challenges
+- **Needs**: 
+  - Quick, streamlined submission process
+  - Secure license verification
+  - Confidence in data de-identification
+  - Educational/practice opportunities
+  - Recognition for contributions
 
-### 2. Healthcare Provider/Researcher (Secondary User)
-- **Goal**: Monitor submissions, manage AI models, review flagged cases
-- **Technical Skill**: Medium to High
-- **Context**: Desktop workstation, administrative environment
-- **Needs**: Dashboard, analytics, health checks, issue resolution tools
+### 2. Admin User (Secondary User)
+- **Goal**: Monitor system health, ensure data quality, and manage case distribution
+- **Technical Skill**: High
+- **Context**: Administrative dashboard, desktop workstation
+- **Primary Activities**:
+  - Monitor AI agent operational status
+  - Check model health and performance
+  - Review and flag malformed responses
+  - Prepare quality-checked cases for random allocation to providers
+  - Track system metrics and submission quality
+  - Resolve technical issues
+- **Needs**: 
+  - Comprehensive monitoring dashboard
+  - Health check tools for all models
+  - Case review and quality control interface
+  - Alert system for failures
+  - Analytics and reporting tools
 
 ---
 
@@ -36,47 +61,61 @@ DermAssist is an Afrocentric digital dermatology research platform that enables 
 **Layout**: Hero section with clear value proposition
 
 **Key Elements**:
-- **Header**: Logo, "Submit Data", "Learn More", "Provider Login"
+- **Header**: Logo, "Submit Case", "Practice Feed", "Provider Login"
 - **Hero Section**:
-  - Headline: "Help Build the Largest Dataset of African Skin Conditions"
-  - Subheadline: "Your de-identified data powers equitable dermatological research"
-  - CTA Button: "Start Submission" (primary action)
-  - Trust indicators: "100% Anonymous", "HIPAA Compliant", "Research Only"
+  - Headline: "Building the Largest Dataset of African Skin Conditions"
+  - Subheadline: "For healthcare providers: Contribute de-identified patient data to advance equitable dermatological research"
+  - CTA Button: "Submit Patient Case" (primary action)
+  - Trust indicators: "100% De-identified", "HIPAA Compliant", "Secure License Verification"
 - **How It Works** (3-step visual):
-  1. Upload Image → 2. Answer Questions → 3. Get AI Analysis
-- **Privacy Promise**: Clear explanation of de-identification
-- **Statistics**: Number of submissions, countries represented, conditions studied
+  1. Capture Patient Photo → 2. De-identify & Answer Questions → 3. Get AI Analysis & Contribute to Research
+- **Privacy Promise**: Clear explanation of de-identification process and data security
+- **Provider Benefits**: 
+  - Contribute to research while maintaining patient privacy
+  - Access AI-powered diagnostic assistance
+  - Practice with anonymized cases
+  - Earn CME credits for contributions
+- **Statistics**: Number of providers, cases submitted, countries represented, conditions studied
 
 **Design Notes**:
-- Warm, inclusive color palette reflecting African skin tones (deep browns, ochre, terracotta)
+- Professional, clinical aesthetic with warm, inclusive accents
+- Warm color palette reflecting African skin tones (deep browns, ochre, terracotta)
 - High contrast for accessibility
-- Photography/illustrations featuring African individuals with various skin tones
+- Photography featuring healthcare providers with diverse patients
 
 #### 1.2 Submission Flow (Conversational Interface)
 
 **Navigation Pattern**: Progressive disclosure, chat-like interface
 
-**Step 1: Welcome & Consent**
-- **Interface**: Chat bubble from "DermAssist AI Assistant"
+**Step 1: Provider Authentication & License Verification**
+- **Interface**: Professional login card
 - **Content**: 
-  - "Welcome! I'll guide you through a simple process to contribute your skin condition data for research."
-  - "All information is completely de-identified and used only for research purposes."
-  - Animated consent checkboxes appear sequentially:
-    - [ ] I understand my data will be de-identified
-    - [ ] I consent to research use
-    - [ ] I am 18+ or have guardian consent
-  - CTA: "Let's Begin" button
+  - "Welcome, Healthcare Provider! Please verify your credentials."
+  - License verification fields:
+    - [ ] Medical license number
+    - [ ] License issuing state/country
+    - [ ] Upload current license document (optional for returning providers)
+  - "Your current valid license information is securely stored and regularly verified"
+  - Animated consent checkboxes:
+    - [ ] I confirm I am a licensed healthcare provider
+    - [ ] I understand data will be de-identified and used for research
+    - [ ] I consent to submit de-identified patient cases
+  - CTA: "Continue to Case Submission" button
 
-**Step 2: Image Upload**
-- **Interface**: Card-based with drag-and-drop
-- **Chat Prompt**: "First, let's upload a clear photo of the skin condition. Please ensure no identifying features (faces, tattoos, birthmarks) are visible."
-- **Upload Options**:
+**Step 2: Patient Photo Capture**
+- **Interface**: Camera/upload card with de-identification guidance
+- **Chat Prompt**: "Capture a clear photo of the patient's skin condition. Ensure NO identifying features are visible (no faces, tattoos, unique birthmarks, or backgrounds with identifying information)."
+- **Capture Options**:
+  - "Use Camera" (for in-clinic use)
+  - "Upload Photo" (if photo already taken)
   - Drag & drop area
-  - "Take Photo" (mobile)
-  - "Choose File" (desktop)
-- **Preview**: Image preview with auto-blur suggestion for identifiable areas
-- **Validation**: File size, format check, quality assessment
-- **Progress Indicator**: "Step 1 of 7"
+- **Auto-De-identification Features**:
+  - AI-powered blur suggestions for potentially identifying regions
+  - Metadata stripping (location, device info, timestamps)
+  - Image quality check and recommendations
+- **Preview**: De-identified image preview with blur overlay on flagged areas
+- **Validation**: File size, format, quality, and de-identification completeness check
+- **Progress Indicator**: "Step 2 of 8"
 
 **Step 3: AI Model Selection (Game-like)**
 - **Interface**: Interactive card carousel
@@ -252,8 +291,71 @@ DermAssist is an Afrocentric digital dermatology research platform that enables 
   │ Average resolution time: [Time]              │
   └──────────────────────────────────────────────┘
   
-  [Download Report PDF]  [Submit Another]
+  [Download Report PDF]  [Submit Another Case]  [Go to Practice Feed]
   ```
+
+---
+
+### 1.3 Practice Feed (Educational & Skill Development)
+
+**Purpose**: Allow healthcare providers to practice diagnostic skills with anonymized cases and participate in consensus-based learning
+
+**Layout**: Feed-style interface with case cards
+
+**Header**:
+- Logo + "Practice Feed"
+- Search and filter options
+- "My Submissions" | "All Cases" | "Consensus Challenges"
+
+**Case Card Design**:
+```
+┌──────────────────────────────────────────────┐
+│ [De-identified Skin Condition Image]         │
+│                                               │
+│ Case #PR-12847                               │
+│ Submitted: 3 days ago                        │
+│ Region: East Africa                          │
+│                                               │
+│ Clinical Context:                            │
+│ • Duration: 2-4 weeks                        │
+│ • Symptoms: Mild itching                     │
+│ • Patient Age Range: 25-35                   │
+│                                               │
+│ 🎯 Your Diagnosis:                           │
+│ [Dropdown: Select ICD-11 Code]              │
+│ [Text: Add notes (optional)]                │
+│                                               │
+│ 📊 Community Consensus:                      │
+│ • Atopic Dermatitis: 45% (23 providers)    │
+│ • Contact Dermatitis: 30% (15 providers)   │
+│ • Psoriasis: 15% (8 providers)             │
+│ • Other: 10% (5 providers)                  │
+│                                               │
+│ [Submit Diagnosis]  [View AI Analysis]      │
+│ [Discuss with Community]                     │
+└──────────────────────────────────────────────┘
+```
+
+**Features**:
+- **Random Case Allocation**: Admin-reviewed cases randomly distributed to providers
+- **Consensus Building**: See how your diagnosis compares with other providers
+- **Learning Points**: Earn CME credits for participation
+- **AI Reveal**: Compare your diagnosis with AI analysis after submitting
+- **Discussion Forum**: Discuss interesting cases with community
+- **Difficulty Levels**: Filter by case complexity (Beginner, Intermediate, Advanced)
+- **Specialization Filters**: Filter by condition type (Inflammatory, Infectious, Neoplastic, etc.)
+
+**Gamification Elements**:
+- **Accuracy Score**: Track diagnostic accuracy over time
+- **Badges**: "Consensus Master", "Quick Learner", "Community Leader"
+- **Leaderboard**: Weekly/monthly top diagnosticians
+- **Streaks**: Maintain daily practice streaks
+
+**Consensus Challenge Mode**:
+- **Time-limited challenges**: Weekly featured cases
+- **Community voting**: Real-time consensus building
+- **Expert commentary**: Dermatology experts provide final analysis
+- **Rewards**: Top performers get recognition and certificates
 
 ---
 
@@ -302,21 +404,28 @@ DermAssist is an Afrocentric digital dermatology research platform that enables 
 └──────────────────┘ └──────────────────┘ └──────────────────┘
 ```
 
-**Section 3: Recent Submissions Table**
+**Section 3: Submission Review & Quality Control**
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Recent Submissions (Last 50)                                 │
+│ Submissions Pending Review                                   │
 │                                                              │
-│ 🔍 [Search] [Filter: All/Success/Failed] [Export CSV]      │
+│ 🔍 [Search] [Filter: New/Reviewed/Flagged] [Allocate]      │
 │                                                              │
-│ ID      | Time      | Model    | Status    | Actions       │
+│ ID      | Provider  | Model    | Status        | Actions   │
 │─────────────────────────────────────────────────────────────│
-│ #12847  | 2m ago    | Claude   | ✓ Success | [View]        │
-│ #12846  | 5m ago    | Gemini   | ✓ Success | [View]        │
-│ #12845  | 8m ago    | GPT-5    | ⚠️ Failed | [Review]      │
+│ #12847  | PRV-4521  | Claude   | ✓ Ready       | [Review]  │
+│ #12846  | PRV-8732  | Gemini   | ⚠️  Flagged   | [Check]   │
+│ #12845  | PRV-1098  | GPT-4o   | ⚠️  Malformed | [Fix]     │
+│ #12844  | PRV-5643  | Qwen     | ✓ Reviewed    | [Allocate]│
 │ ...                                                          │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+**Actions**:
+- **Review**: Check submission quality and AI response
+- **Flag**: Mark malformed or problematic submissions
+- **Allocate**: Prepare quality-checked cases for Practice Feed
+- **Bulk Actions**: Process multiple submissions at once
 
 **Section 4: Analytics Charts**
 - **Submissions Over Time**: Line chart (last 30 days)
@@ -611,6 +720,69 @@ Based on 8px grid:
 - **Code Splitting**: Route-based code splitting
 - **CDN**: Static assets served from CDN
 - **Caching**: Aggressive caching for static content
+
+---
+
+## Database Architecture & Data Management
+
+### Prisma ORM Schema
+
+DermAssist uses **Prisma ORM** for type-safe database management with PostgreSQL/Supabase.
+
+**Core Data Models**:
+
+1. **Provider** (Healthcare Providers)
+   - License verification and authentication
+   - Submission history tracking
+   - Practice feed participation
+
+2. **Submission** (Patient Cases)
+   - De-identified patient images
+   - Clinical context and symptoms
+   - AI analysis results
+   - Quality review status
+
+3. **Diagnosis** (Practice Feed Entries)
+   - Provider diagnostic attempts
+   - Consensus building data
+   - Learning progress tracking
+
+4. **ModelHealthCheck** (System Monitoring)
+   - AI model availability
+   - Performance metrics
+   - Error tracking
+
+**Key Database Features**:
+- **Row Level Security (RLS)**: Enforced at database level
+- **Automatic Timestamps**: `createdAt`, `updatedAt` on all models
+- **Image Hash Deduplication**: Prevent duplicate submissions
+- **Indexed Queries**: Optimized for common access patterns
+- **Type-Safe Queries**: Full TypeScript support via Prisma Client
+
+**Data Flow**:
+```
+Provider → Upload Image → De-identify → AI Analysis → 
+Submission (PENDING) → Admin Review → 
+Submission (APPROVED_FOR_PRACTICE) → Practice Feed → 
+Diagnosis by Multiple Providers → Consensus
+```
+
+**Privacy & De-identification**:
+- Patient identifiers **never** stored in database
+- Images automatically stripped of EXIF metadata
+- Image hashes used for duplicate detection (not original images)
+- Provider info limited to license verification (no PHI)
+- Admin-reviewed before allocation to practice feed
+
+### Database UI Considerations
+
+**For Design**:
+- Show submission status badges (Pending, Under Review, Approved, Failed)
+- Display quality scores with visual indicators
+- Present consensus percentages as progress bars or pie charts
+- Use color coding for model health status (Green/Yellow/Red)
+- Implement pagination for large datasets
+- Show real-time updates for new submissions/diagnoses
 
 ---
 
