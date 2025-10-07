@@ -120,13 +120,41 @@ Built with SOLID principles:
 
 ## 📚 Documentation
 
-- **[Setup Guide (SETUP.md)](./SETUP.md)** - Complete setup instructions including authentication
-- **[Testing Guide (TESTING.md)](./TESTING.md)** - Comprehensive testing documentation
-- **[Design Specification (kombai.md)](./kombai.md)** - UI/UX design specifications for Figma Make
-- **[Multi-Provider Setup (MULTI_PROVIDER_SETUP.md)](./MULTI_PROVIDER_SETUP.md)** - AI provider configuration
-- **[Architecture (ARCHITECTURE.md)](./ARCHITECTURE.md)** - System architecture and SOLID principles
-- **[Supabase Schema](./supabase/schema.sql)** - Database setup for Supabase
-- **[Migration Summary](./MIGRATION_SUMMARY.md)** - Next.js migration details
+DermAssist documentation is organized using the **MECE framework** (Mutually Exclusive, Collectively Exhaustive) for comprehensive, non-overlapping coverage.
+
+### Quick Navigation
+
+**For Healthcare Providers:**
+- **[Getting Started](./docs/user-guides/getting-started.md)** - First-time setup and onboarding
+- **[Healthcare Provider Guide](./docs/user-guides/healthcare-provider-guide.md)** - Complete guide for medical professionals
+- **[Submission Guide](./docs/user-guides/submission-guide.md)** - Step-by-step case submission
+
+**For Developers:**
+- **[Setup Guide](./docs/technical/setup-guide.md)** - Development environment and dependencies
+- **[Database Guide](./docs/technical/database-guide.md)** - Prisma ORM, schema, and migrations
+- **[Testing Guide](./docs/technical/testing-guide.md)** - Unit, integration, and E2E testing
+- **[API Reference](./docs/technical/api-reference.md)** - Endpoints and integration
+
+**For Designers:**
+- **[Design Specification](./docs/design/figma-specification.md)** - Complete Figma Make design spec
+- **[Design System](./docs/design/design-system.md)** - Components, colors, typography
+- **[User Flows](./docs/design/user-flows.md)** - Interaction patterns
+
+**Quick Reference:**
+- **[AI Providers Reference](./docs/reference/ai-providers-reference.md)** - Comparison of all 6 AI providers
+- **[Architecture Overview](./docs/reference/architecture-overview.md)** - System architecture and SOLID principles
+- **[ICD-11 Quick Reference](./docs/reference/icd11-reference.md)** - Common dermatological codes
+
+**[📂 Complete Documentation Index](./docs/README.md)** - Full MECE-organized documentation structure
+
+### Legacy Documentation
+
+The following root-level docs are maintained for backward compatibility:
+- **[SETUP.md](./SETUP.md)** - Moved to `docs/technical/setup-guide.md`
+- **[TESTING.md](./TESTING.md)** - Moved to `docs/technical/testing-guide.md`
+- **[kombai.md](./kombai.md)** - Moved to `docs/design/figma-specification.md`
+- **[MULTI_PROVIDER_SETUP.md](./MULTI_PROVIDER_SETUP.md)** - Merged into setup guide
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Moved to `docs/reference/architecture-overview.md`
 
 ## 🛠️ Development
 
