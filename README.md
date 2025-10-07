@@ -37,17 +37,38 @@ pnpm build
 
 ## 🤖 Multi-Provider AI Support
 
-DermAssist now supports multiple AI providers, allowing you to choose the best model for your needs:
+DermAssist now supports **six AI providers**, allowing you to choose the best model for your needs:
 
-- **Azure OpenAI** - Enterprise-grade GPT-4o models
-- **Google Gemini** - Fast, cost-effective AI via Google AI Studio
-- **Groq** - Ultra-fast inference with LLaMA and Mixtral
+- **Claude (Anthropic)** - Advanced reasoning with Claude Sonnet 3.5, Opus, and Haiku
+- **OpenAI** - GPT-4o, GPT-4o-mini for comprehensive analysis
+- **Google Gemini** - Fast, cost-effective AI via Google AI Studio (Gemini 2.0 Flash)
+- **Azure OpenAI** - Enterprise-grade GPT-4o models with Microsoft Azure
+- **Groq** - Ultra-fast inference with LLaMA 3.3 and Mixtral
+- **Qwen** - Multilingual support with Alibaba Cloud's Qwen models
 
 **[📖 Complete Setup Guide](./MULTI_PROVIDER_SETUP.md)** - Detailed instructions for configuring each provider
 
 ### Quick Configuration
 
-Choose ONE provider and add to your `.env` file:
+Choose ONE or MORE providers and add to your `.env` file:
+
+**Claude (Recommended for clinical analysis):**
+```bash
+ANTHROPIC_API_KEY=your_key
+CLAUDE_MODEL=claude-3-5-sonnet-20241022
+```
+
+**OpenAI:**
+```bash
+OPENAI_API_KEY=your_key
+OPENAI_MODEL=gpt-4o
+```
+
+**Google Gemini:**
+```bash
+GOOGLE_GEMINI_API_KEY=your_key
+GEMINI_MODEL=gemini-2.0-flash-exp
+```
 
 **Azure OpenAI:**
 ```bash
@@ -56,16 +77,16 @@ AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com
 AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
 ```
 
-**Google Gemini:**
-```bash
-GOOGLE_GEMINI_API_KEY=your_key
-GOOGLE_GEMINI_MODEL=gemini-1.5-flash
-```
-
 **Groq:**
 ```bash
 GROQ_API_KEY=your_key
 GROQ_MODEL=llama-3.3-70b-versatile
+```
+
+**Qwen:**
+```bash
+QWEN_API_KEY=your_key
+QWEN_MODEL=qwen-max
 ```
 
 ## 💾 Supabase Storage (Optional)
@@ -99,7 +120,11 @@ Built with SOLID principles:
 
 ## 📚 Documentation
 
-- **[Multi-Provider Setup Guide](./MULTI_PROVIDER_SETUP.md)** - Complete guide for AI provider configuration
+- **[Setup Guide (SETUP.md)](./SETUP.md)** - Complete setup instructions including authentication
+- **[Testing Guide (TESTING.md)](./TESTING.md)** - Comprehensive testing documentation
+- **[Design Specification (kombai.md)](./kombai.md)** - UI/UX design specifications for Figma Make
+- **[Multi-Provider Setup (MULTI_PROVIDER_SETUP.md)](./MULTI_PROVIDER_SETUP.md)** - AI provider configuration
+- **[Architecture (ARCHITECTURE.md)](./ARCHITECTURE.md)** - System architecture and SOLID principles
 - **[Supabase Schema](./supabase/schema.sql)** - Database setup for Supabase
 - **[Migration Summary](./MIGRATION_SUMMARY.md)** - Next.js migration details
 
@@ -120,7 +145,36 @@ pnpm start
 
 # Run linter
 pnpm lint
+
+# Run tests
+pnpm test
+
+# Run tests with coverage
+pnpm test:coverage
+
+# Run tests in watch mode
+pnpm test:watch
 ```
+
+### Testing
+
+DermAssist includes comprehensive testing:
+
+```bash
+# Run all tests
+pnpm test
+
+# Run unit tests only
+pnpm test:unit
+
+# Run provider tests
+pnpm test:providers
+
+# Run with UI
+pnpm test:ui
+```
+
+See **[TESTING.md](./TESTING.md)** for complete testing documentation.
 
 ## 📦 Tech Stack
 
