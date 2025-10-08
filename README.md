@@ -46,7 +46,7 @@ DermAssist now supports **six AI providers**, allowing you to choose the best mo
 - **Groq** - Ultra-fast inference with LLaMA 3.3 and Mixtral
 - **Qwen** - Multilingual support with Alibaba Cloud's Qwen models
 
-**[📖 Complete Setup Guide](./MULTI_PROVIDER_SETUP.md)** - Detailed instructions for configuring each provider
+**[📖 Complete Setup Guide](./docs/technical/setup-guide.md)** - Detailed instructions for configuring each provider
 
 ### Quick Configuration
 
@@ -100,17 +100,30 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 
 Then run the SQL schema from `supabase/schema.sql` in your Supabase project.
 
-See **[Multi-Provider Setup Guide](./MULTI_PROVIDER_SETUP.md#supabase-storage-optional)** for detailed instructions.
+See **[Setup Guide](./docs/technical/setup-guide.md)** for detailed instructions.
 
 ## 🏗️ Architecture
 
-Built with SOLID principles:
+Built with Next.js 15 App Router (standard structure with `app/` directory at root) and SOLID principles:
 
 - **Single Responsibility**: Focused, maintainable components
 - **Open/Closed**: Extensible without modification
 - **Liskov Substitution**: Interchangeable providers
 - **Interface Segregation**: Specific, minimal interfaces
 - **Dependency Inversion**: Abstract over concrete implementations
+
+**Project Structure:**
+```
+dermaassist/
+├── app/                    # Next.js 15 App Router (pages & API routes)
+├── src/                    # Application source code
+│   ├── components/         # React components
+│   ├── lib/               # Utilities and AI clients
+│   └── hooks/             # Custom React hooks
+├── docs/                   # Organized documentation (MECE framework)
+├── prisma/                # Database schema
+└── public/                # Static assets
+```
 
 **Key Design Patterns:**
 - Factory Pattern for provider creation
@@ -147,14 +160,7 @@ DermAssist documentation is organized using the **MECE framework** (Mutually Exc
 
 **[📂 Complete Documentation Index](./docs/README.md)** - Full MECE-organized documentation structure
 
-### Legacy Documentation
 
-The following root-level docs are maintained for backward compatibility:
-- **[SETUP.md](./SETUP.md)** - Moved to `docs/technical/setup-guide.md`
-- **[TESTING.md](./TESTING.md)** - Moved to `docs/technical/testing-guide.md`
-- **[kombai.md](./kombai.md)** - Moved to `docs/design/figma-specification.md`
-- **[MULTI_PROVIDER_SETUP.md](./MULTI_PROVIDER_SETUP.md)** - Merged into setup guide
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Moved to `docs/reference/architecture-overview.md`
 
 ## 🛠️ Development
 
@@ -202,7 +208,7 @@ pnpm test:providers
 pnpm test:ui
 ```
 
-See **[TESTING.md](./TESTING.md)** for complete testing documentation.
+See **[Testing Guide](./docs/technical/testing-guide.md)** for complete testing documentation.
 
 ## 📦 Tech Stack
 
