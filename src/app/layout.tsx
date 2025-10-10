@@ -29,18 +29,23 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <ClerkProvider>
-      <html lang="en">
-        <body>
-          <QueryClientProvider>
-            <TooltipProvider>
-              <Sonner />
-              {children}
-            </TooltipProvider>
-          </QueryClientProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+  const content = (
+    <html lang="en">
+      <body>
+        <QueryClientProvider>
+          <TooltipProvider>
+            <Sonner />
+            {children}
+          </TooltipProvider>
+        </QueryClientProvider>
+      </body>
+    </html>
   );
+
+  // Only wrap with ClerkProvider if keys are configured
+  if (process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+    return <ClerkProvider>{content}</ClerkProvider>;
+  }
+
+  return content;
 }
