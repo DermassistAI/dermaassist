@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from '@clerk/nextjs';
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClientProvider } from "@/components/providers/QueryClientProvider";
@@ -29,15 +30,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
-        <QueryClientProvider>
-          <TooltipProvider>
-            <Sonner />
-            {children}
-          </TooltipProvider>
-        </QueryClientProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body>
+          <QueryClientProvider>
+            <TooltipProvider>
+              <Sonner />
+              {children}
+            </TooltipProvider>
+          </QueryClientProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
