@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Progress } from './ui/progress';
 import { Separator } from './ui/separator';
 import { Label } from './ui/label';
-import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { ImageWithFallback } from './figma/ImageWithFallback';
 import { 
   ArrowLeft, 
   Brain, 
