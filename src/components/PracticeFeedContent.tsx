@@ -26,7 +26,7 @@ import {
   Home
 } from 'lucide-react';
 
-export function PracticeFeedContent() {
+interface CaseData {
   id: string;
   image: string;
   ageRange: string;
@@ -45,6 +45,15 @@ export function PracticeFeedContent() {
   expertCommentary?: string;
   difficulty: 'Easy' | 'Medium' | 'Hard' | 'Expert';
 }
+
+const userStats = {
+  accuracy: 85,
+  streak: 12,
+  totalCases: 47,
+  rank: 23,
+  cmeCredits: 8.5,
+  badges: ['Quick Learner', 'Consensus Master', 'Streak Champion']
+};
 
 const mockCases: CaseData[] = [
   {
@@ -116,16 +125,7 @@ const mockCases: CaseData[] = [
   }
 ];
 
-const userStats = {
-  accuracy: 85,
-  streak: 12,
-  totalCases: 47,
-  rank: 23,
-  cmeCredits: 8.5,
-  badges: ['Quick Learner', 'Consensus Master', 'Streak Champion']
-};
-
-interface CaseData {
+export function PracticeFeedContent() {
   const [selectedCase, setSelectedCase] = useState<CaseData | null>(null);
   const [userDiagnosis, setUserDiagnosis] = useState<string>('');
   const [showResults, setShowResults] = useState<boolean>(false);
