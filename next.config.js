@@ -7,9 +7,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
-  images: {
-    domains: ['lovable.dev'],
-  },
   experimental: {
     serverActions: {
       allowedOrigins: ['localhost:3000'],

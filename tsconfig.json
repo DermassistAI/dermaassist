@@ -30,7 +30,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@/app/*": ["./app/*"]
+      "@/app/*": ["src/app/*"]
     },
     
     /* Next.js specific */
@@ -45,8 +45,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/**/*.ts",
-    "app/**/*.tsx",
+    "src/app/**/*.ts",
+    "src/app/**/*.tsx",
     "src/types/**/*.d.ts"
   ],
   "exclude": ["node_modules"]
